@@ -45,12 +45,12 @@ class AirlineB(TravelByPlane):
         self.cost=cost
  
     def travel(self):
-        print('TravelBy Airline A')
+        print('Travel By Airline B')
 
 
 p=Person()
 p.setTravelStrategy(TravelByShip())
 p.travel()
-p.setTravelStrategy(AirlineB(1500))
+p.setTravelStrategy(AirlineB(2500))
 p.travel()
 print(p.money)
