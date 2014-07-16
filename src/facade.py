@@ -1,6 +1,6 @@
 # -*- coding:gb2312 -*-
 '''
-个人理解：和模板方法差不错，视角不同，这里是从这个过程来定义
+个人理解：和模板方法差不多，视角不同，这里是从这个过程来定义
 
 '''
 
@@ -10,13 +10,16 @@ class Getup():
     def getUp(self):
         print('getUp')
     
+    
 class BrushTeeth():
     def brushTeeth(self):
         print('brushTeeth')
      
+     
 class Dress():
     def dress(self):
         print('dress')
+        
         
 class GoOut():
     def goOut(self):
@@ -26,12 +29,12 @@ class HaveBreakfast():
     def haveBreakfast(self):
         print('haveBreakfast')
         
+        
 class ArriveSchool():
     def arriveSchool(self):
         print('ArriveSchool')
     
     
-
 class GoToSchool:
     def __init__(self):
         self.getUp=Getup()
@@ -57,8 +60,6 @@ class GoToSchool:
         self.goOut.goOut()
         self.arraveSchool.arriveSchool()
        
-    class Process3:
-        pass 
 
 '''
 上学前一系列动作作为参数传给Student的方法

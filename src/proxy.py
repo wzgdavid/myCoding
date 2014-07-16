@@ -17,6 +17,7 @@ class RealObject(Interface):
     def show(self):
         print ("Real show.")
 
+
 class RealObject2(Interface): 
     def __init__(self):
         print('init RealObject2')

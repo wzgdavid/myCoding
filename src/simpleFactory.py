@@ -4,6 +4,7 @@ class Vehicle:
     def __init__(self):
         pass
     
+    
 class VehicleType:
     CAR='car'
     TRUCK='truck'
@@ -15,6 +16,7 @@ class Car(Vehicle):
         self.type=VehicleType.CAR
         self.description=' Or at least , not car tires'
 
+
 class Truck (Vehicle):
     def __init__(self):
         self.type=VehicleType.TRUCK
@@ -25,6 +27,7 @@ class Jeep(Vehicle):
     def __init__(self):
         self.type=VehicleType.JEEP
         self.description=' Chrysler even produced a commemorative version of its jeep.'
+
 
 class VehicleFactory:
     def createVehicle(self,vtype):

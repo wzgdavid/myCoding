@@ -23,20 +23,16 @@ class CarDecorator():
     def color(self,color):
         colors={'red','white','black','yellow'}
         if color in colors:
-            #print('color is ',color)
             self.car.color=color
         else:
-            #print('custom color')
             self.car.color='custom color '+color
         return self #可以链式调用，就像jQuery
     
     def carType(self,ctype):
         ctypes={'911','Cayman','Macan'}
         if ctype in ctypes:
-            #print('car type is ',ctype)
             self.car.ctype=ctype
         else:
-            #print('custom type')
             self.car.ctype='custom type '+ctype
         return self
  
