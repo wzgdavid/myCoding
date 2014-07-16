@@ -31,9 +31,10 @@ class Proxy(Interface):
         self.proxyObject=whichRealObject
         
     def getObject(self):
-        realObjectDict={'ro':RealObject,'ro2':RealObject2}
-        if self.proxyObject in realObjectDict.keys():
-            self.real = realObjectDict[self.proxyObject]()#这里产生实例  
+        if 'real' not in dir(self):#避免重复实例化
+            realObjectDict={'ro':RealObject,'ro2':RealObject2}
+            if self.proxyObject in realObjectDict.keys():
+                self.real = realObjectDict[self.proxyObject]()#这里产生实例  
     '''
                 调用方法的时候再实例化所代理的对象
     '''
@@ -41,23 +42,20 @@ class Proxy(Interface):
         self.getObject()
         self.real.request()
         return self.real
+    
     def show(self):
         self.getObject()
         self.real.show()
         return self.real
 
-#yong
+#用代理
 pro=Proxy('ro2')
-ro=pro.request()#这里产生实例  
+ro=pro.show()#这里产生实例  
+pro.request()
+
+#不用代理
+ro=RealObject()#这里产生实例  
+ro.request()
 ro.show()
 
 
-roo=RealObject()#这里产生实例  
-roo.request()
-roo.show()
-
-
-
-
-
-        
