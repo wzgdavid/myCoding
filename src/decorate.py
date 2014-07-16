@@ -1,3 +1,5 @@
+# -*- coding:gb2312 -*-
+
 class Car:
     def __init__(self,name):
         self.name=name
@@ -26,7 +28,7 @@ class CarDecorator():
         else:
             #print('custom color')
             self.car.color='custom color '+color
-        return self
+        return self #可以链式调用，就像jQuery
     
     def carType(self,ctype):
         ctypes={'911','Cayman','Macan'}

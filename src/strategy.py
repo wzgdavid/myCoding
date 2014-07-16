@@ -51,6 +51,6 @@ class AirlineB(TravelByPlane):
 p=Person()
 p.setTravelStrategy(TravelByShip())
 p.travel()
-p.setTravelStrategy(AirlineB(2500))
+p.setTravelStrategy(AirlineB(2500)) #不同策略对调用主体的属性有影响
 p.travel()
 print(p.money)
