@@ -1,5 +1,7 @@
 # -*- coding:gb2312 -*-
-
+'''
+装饰模式
+'''
 class Car:
     def __init__(self,name):
         self.name=name
@@ -16,10 +18,12 @@ class Car:
     
     
 class CarDecorator():
-    def __init__(self,car):
-        self.car=car
+    def __init__(self):
         pass
     
+    def setCar(self,car):
+        self.car=car
+        
     def color(self,color):
         colors={'red','white','black','yellow'}
         if color in colors:
@@ -39,7 +43,12 @@ class CarDecorator():
 
 
            
-car=Car('my car')    
-cd=CarDecorator(car)
+car=Car('my car')
+car2=Car('big car')    
+cd=CarDecorator()
+cd.setCar(car)
 cd.color('red').carType('911')
-print(car)
+cd.setCar(car2)
+cd.color('black').carType('F1')
+
+print(car,car2)

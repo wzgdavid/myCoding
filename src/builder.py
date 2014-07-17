@@ -1,7 +1,8 @@
-# -*- coding:gb2312 -*-
+#encoding:gb2312
 
 '''
-和factory很像
+建造者模式
+锟斤拷factory锟斤拷锟斤拷
 '''
 
 
@@ -38,4 +39,5 @@ class Director:
 d=Director()
 car=d.getCarA()
 print(car.bodyColor,car.wheelSize)
+
     
