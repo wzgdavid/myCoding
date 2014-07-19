@@ -28,34 +28,41 @@ class RealObject2(Interface):
         
         
 class Proxy(Interface):
-    def __init__(self,whichRealObject):
-        self.proxyObject=whichRealObject
+    def __init__(self,proxyObject):
+        self.proxyObject=proxyObject
         
+    '''    
     def getObject(self):
         #if 'real' not in dir(self):#避免重复实例化
         if not hasattr(self,'real'):   
             realObjectDict={'ro':RealObject,'ro2':RealObject2}
             if self.proxyObject in realObjectDict.keys():
                 self.real = realObjectDict[self.proxyObject]()#这里产生实例  
-
+    '''
+        
     def request(self):
-        self.getObject()
-        self.real.request()
-        return self.real
+        
+        self.proxyObject.request()
+        return self.proxyObject
     
     def show(self):
-        self.getObject()
-        self.real.show()
-        return self.real
+        
+        self.proxyObject.show()
+        return self.proxyObject
 
-#用代理
-pro=Proxy('ro2')
-ro=pro.show()#这里产生实例  
-pro.request()
 
 #不用代理
 ro=RealObject()#这里产生实例  
-ro.request()
 ro.show()
+ro.request()
+
+#用代理
+ro2=RealObject()
+pro=Proxy(ro2)
+pro.show()#这里产生实例  
+pro.request()
+
+
+
 
 
