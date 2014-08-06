@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//point24/point24.py=utf-8
+encoding//point24/point24ori.py=utf-8
 encoding//src/abstractFactory.py=gb2312
 encoding//src/bridge.py=gb2312
 encoding//src/builder.py=gb2312
@@ -21,3 +23,4 @@ encoding//src/state.py=gb2312
 encoding//src/state0.py=gb2312
 encoding//src/strategy.py=gb2312
 encoding//src/templateMethod.py=gb2312
+encoding/<project>=UTF-8
