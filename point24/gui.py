@@ -25,7 +25,9 @@ class Window:
         self.op_now = ''
         self.opnum = 0
         self.num_temp = 0
+        self.num_count = 0
         self.op_can_use = False
+        self.btn_num_temp_used = False
         
         # 数字按钮
         self.btn_num1 = tk.Button(self.tkwindow, text=self.num1, command=self.command_num1,
@@ -92,7 +94,8 @@ class Window:
         self.op_now = ''
         self.opnum = 0
         self.num_temp = 0
-        self.btn_num_temp_used = False        
+        self.btn_num_temp_used = False
+        self.num_count = 0       
 
     def command_answer(self):
         ans = cal_24point(self.num1, self.num2, self.num3, self.num4)
@@ -147,57 +150,69 @@ class Window:
     def command_num1(self):
         if self.op_pressed:
             self.opnum = self.opdict[self.op_now](self.opnum, self.num1)[0]
-            self.btn_num_temp['text'] = self.opnum
-            self.num_temp = self.opnum
+            if not self.btn_num_temp_used:
+                self.btn_num_temp['text'] = self.opnum
+                self.num_temp = self.opnum
+                self.btn_num_temp_used = True
         else:
             self.opnum = self.num1
         print(self.opnum)
         self.op_pressed = False
         self.btn_num1['state'] = 'disabled'
         self.op_can_use = True
-        if self.opnum == 24:
+        self.num_count += 1
+        if self.opnum == 24 and self.num_count ==4:
             self.label_ans['text'] = 'right'
 
     def command_num2(self):
         if self.op_pressed:
             self.opnum = self.opdict[self.op_now](self.opnum, self.num2)[0]
-            self.btn_num_temp['text'] = self.opnum
-            self.num_temp = self.opnum
+            if not self.btn_num_temp_used:
+                self.btn_num_temp['text'] = self.opnum
+                self.num_temp = self.opnum
+                self.btn_num_temp_used = True
         else:
             self.opnum = self.num2
         print(self.opnum)
         self.op_pressed = False
         self.btn_num2['state'] = 'disabled'
         self.op_can_use = True
-        if self.opnum == 24:
+        self.num_count += 1
+        if self.opnum == 24 and self.num_count ==4:
             self.label_ans['text'] = 'right'
 
     def command_num3(self):
         if self.op_pressed:
             self.opnum = self.opdict[self.op_now](self.opnum, self.num3)[0]
-            self.btn_num_temp['text'] = self.opnum
-            self.num_temp = self.opnum
+            if not self.btn_num_temp_used:
+                self.btn_num_temp['text'] = self.opnum
+                self.num_temp = self.opnum
+                self.btn_num_temp_used = True
         else:
             self.opnum = self.num3
         print(self.opnum)
         self.op_pressed = False
         self.btn_num3['state'] = 'disabled'
         self.op_can_use = True
-        if self.opnum == 24:
+        self.num_count += 1
+        if self.opnum == 24 and self.num_count ==4:
             self.label_ans['text'] = 'right'
 
     def command_num4(self):
         if self.op_pressed:
             self.opnum = self.opdict[self.op_now](self.opnum, self.num4)[0]
-            self.btn_num_temp['text'] = self.opnum
-            self.num_temp = self.opnum
+            if not self.btn_num_temp_used:
+                self.btn_num_temp['text'] = self.opnum
+                self.num_temp = self.opnum
+                self.btn_num_temp_used = True
         else:
             self.opnum = self.num4
         print(self.opnum)
         self.op_pressed = False
         self.btn_num4['state'] = 'disabled'
         self.op_can_use = True
-        if self.opnum == 24:
+        self.num_count += 1
+        if self.opnum == 24 and self.num_count ==4:
             self.label_ans['text'] = 'right'
 
     def center(self):
