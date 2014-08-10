@@ -94,12 +94,12 @@ class Window:
 
         self.btn_answer = tk.Button(self.tkwindow, text='显示答案', 
                                     command=self.command_answer,
-                                 width=B_WIDTH, height=B_HEIGHT,relief='groove')
+                                    width=B_WIDTH, height=B_HEIGHT,relief='groove')
         self.btn_answer.pack(padx=1, side='right')
 
         self.btn_clear = tk.Button(self.tkwindow, text='清除', 
                                    command=self.command_clear,
-                                 width=B_WIDTH, height=B_HEIGHT,relief='groove')
+                                   width=B_WIDTH, height=B_HEIGHT,relief='groove')
         self.btn_clear.pack(padx=1, side='right')
 
     # 一个数字只能按一次，按错了用clear重来

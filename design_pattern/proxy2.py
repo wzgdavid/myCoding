@@ -1,7 +1,5 @@
 # coding:utf-8
-'''
-Proxy代理RealObject对象，当调用realObject的方法时再产生其对象，
-'''
+
 import weakref
 
 class Interface:
