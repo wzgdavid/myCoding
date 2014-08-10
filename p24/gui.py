@@ -1,5 +1,4 @@
 # enconding:utf-8
-# file point24/gui
 
 import tkinter as tk
 import random
