@@ -3,7 +3,8 @@
 
 import tkinter as tk
 import random
-from point24.bk import cal_24point, add, minus, multiply, divide
+from p24.bk import cal_24point, add, minus, multiply, divide
+
 
 class Window:
     def __init__(self, title='24点', width=650, height=400):
@@ -135,7 +136,7 @@ class Window:
 
     def command_minus(self):
         return self.command_op('-')
-
+        
     def command_multipy(self):
         return self.command_op('*')
 
@@ -198,5 +199,6 @@ class Window:
         self.tkwindow.mainloop()
 
 # ##############################run##################################
-w = Window()
-w.loop()
+if __name__ == '__main__':
+    w = Window()
+    w.loop()

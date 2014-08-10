@@ -1,8 +1,8 @@
-# -*- coding:gb2312 -*-
+# coding:utf-8
 '''
-Proxy´úÀíRealObject¶ÔÏó£¬µ±µ÷ÓÃrealObjectµÄ·½·¨Ê±ÔÙ²úÉúÆä¶ÔÏó£¬
+Proxyä»£ç†RealObjectå¯¹è±¡ï¼Œå½“è°ƒç”¨realObjectçš„æ–¹æ³•æ—¶å†äº§ç”Ÿå…¶å¯¹è±¡ï¼Œ
 '''
-
+import weakref
 
 class Interface:
     def request(self):
@@ -39,7 +39,6 @@ class Proxy(Interface):
         self.proxyObject = proxyObject
 
     def request(self):
-
         self.proxyObject.request()
         return self.proxyObject
 
@@ -48,13 +47,16 @@ class Proxy(Interface):
         return self.proxyObject
 
 
-# ²»ÓÃ´úÀí
 ro = RealObject()
 ro.show()
 ro.request()
 
-# ÓÃ´úÀí
-ro2 = RealObject()
-pro = Proxy(ro2)
+pro = Proxy(ro)
 pro.show()
 pro.request()
+print(pro)
+# åæ¥å‘ç°pythonåº“é‡Œæœ‰ä»£ç†
+pro2 = weakref.proxy(ro)
+pro2.show()
+pro2.request()
+print(pro2)

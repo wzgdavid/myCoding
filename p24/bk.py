@@ -1,4 +1,5 @@
 # encoding:utf-8
+# file point24/bk
 
 import itertools
 import random
@@ -34,16 +35,14 @@ def cal_24point(a, b, c, d):
         n = op2(m[0], pmt[2])
         result = op3(n[0], pmt[3])
         if result[0] == 24:
-            #print(m[1], n[1], result[1])
             return (m[1], n[1], result[1])
-    
+
     # (c, (a, b)), d    
     def pro2(op1, op2, op3):
         m = op1(pmt[0], pmt[1])
         n = op2(pmt[2] , m[0])
         result = op3(n[0], pmt[3])
         if result[0] == 24:
-            #print(m[1], n[1], result[1])
             return (m[1], n[1], result[1])
 
     # d, ((a, b), c)
@@ -52,7 +51,6 @@ def cal_24point(a, b, c, d):
         n = op2(m[0], pmt[2])
         result = op3(pmt[3], n[0])
         if result[0] == 24:
-            #print(m[1], n[1], result[1])
             return (m[1], n[1], result[1])
 
     # d, (c, (a, b))
@@ -61,7 +59,6 @@ def cal_24point(a, b, c, d):
         n = op2(pmt[2], m[0])
         result = op3(pmt[3], n[0])
         if result[0] == 24:
-            #print(m[1], n[1], result[1])
             return (m[1], n[1], result[1]) 
 
     # (a b)(c d)
@@ -70,7 +67,7 @@ def cal_24point(a, b, c, d):
         n = op2(pmt[2], pmt[3])
         result = op3(n[0], m[0])
         if result[0] == 24:
-            #print(m[1], n[1], result[1])
+            
             return (m[1], n[1], result[1])
 
     for pmt in permutation_list:
@@ -142,6 +139,7 @@ def cal_24point(a, b, c, d):
 
 # ---------------------------test---------------------------------
 '''
+
 for n in range(30):
     a = random.randint(1,13)
     b = random.randint(1,13)
