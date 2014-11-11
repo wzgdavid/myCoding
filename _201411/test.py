@@ -65,3 +65,30 @@ def listall():
             print n, 2*n, 3*n
 listall()
 
+# 进制转换
+def integer_to_decimal(num, r):
+    '''r 进制 整数 转成十进制'''
+    reverse_num = str(num).split('.')[0][::-1]  # 12.123 => 21     12 => 21
+    l = [ int(n)*(r**i) for i, n in enumerate(reverse_num) ]
+    return sum(l)
+
+def small_num_to_decimal(num, r):
+    '''r 进制 小数 转成十进制'''
+    if not '.' in str(num):
+        return
+    small_num = str(num).split('.')[1]   # 12.123 => 123
+    reverse_small_num = small_num[::-1]  # 123 => 321
+    for i, n in enumerate(reverse_small_num):
+        if i == 0:
+            result = float(n)/r
+        else:
+            result = (result+float(n))/r
+    return result
+
+def to_decimal(num, r):
+    if '.' in str(num):
+        return integer_to_decimal(num, r) + small_num_to_decimal(num, r)
+    else:
+        return integer_to_decimal(num, r)
+print to_decimal(123.123, 8)
+
