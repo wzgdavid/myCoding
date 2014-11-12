@@ -121,3 +121,32 @@ def count_vowels(text):
 
 text = 'nice to meet you'
 print(count_vowels(text))
+
+
+'''
+    #输入日期： dd/mm/yyyy, 看看它是不是在未来, 计算出它和今天隔了多少天 (输入的那天算，但是今天的日期不算). 举例来说，输入的是明天的日期，计算结果就是1。
+    #如果输入日期不符合实际条件（例如月份只能1-12，2月没有30号之类的），打出：“invalid date”
+    #如果时间在过去而不在未来，打出“the date is not in future”
+    #另外闰年（2月有29天）的情况也要考虑到。
+    #关于闰年：
+    #并不是说年份能被4整除就行。
+    #能被100整除的都不是闰年，除非它能被400整除（例如2000，2400是闰年，2100，2300就不是。)
+'''
+import datetime
+def string_toDatetime(string, strformat='%Y-%m-%d'):
+    return datetime.datetime.strptime(string, strformat)
+
+def get_timedelta(input_date):
+    try:
+        input_date = string_toDatetime(input_date)
+    except ValueError:
+        return 'invalid date'
+    today = datetime.datetime.now()
+    delta = input_date - today
+    if delta.days <= 0:
+        return 'the date is not in future'
+    else:
+        return delta.days
+
+print get_timedelta('2015-10-30')
+
