@@ -92,3 +92,32 @@ def to_decimal(num, r):
         return integer_to_decimal(num, r)
 print to_decimal(123.123, 8)
 
+
+# 输入一串文字，统计这串文字里的【元音字母（aeiou）大小写不分，A和a都统一算是a】的数量。有3个要求：
+# 1.打印出出现次数最少的元音字母和它的出现次数，如果出现次数为0的话就忽略不急。例如，“Are you about ”，里面没出现i， i就不算了。所以它打出来的东西就是“e with 1 occurence.”
+# 2.类似于“Andy was here”，a 和 e 都是出现次数最少的元音字母（2次），那么打出来就得是 both a and e have 2 occurrences。
+# 3.如果这串文字里没有元音的话，得说“no vewels in here.”
+def count_vowels(text):
+    from collections import Counter
+    cnt = Counter(text.lower())    # for example   text = 'nice to meet you'
+    vowels_cnt = {}
+    
+    for n in 'aeiou':
+        if cnt[n] != 0:
+            vowels_cnt[n] = cnt[n]  # 元音计数  vowels_cnt = {'i': 1, 'u': 1, 'e': 3, 'o': 2}
+    if not vowels_cnt:
+        return 'no vewels here.'
+    min_num = min(vowels_cnt.values())  # min_num = 1
+    min_cnt_vowel = []
+    
+    for vewel, num in vowels_cnt.items():
+        if num == min_num:
+            min_cnt_vowel.append(vewel)  # 出现次数最少的元音 min_cnt_vowel ＝ ['i', 'u']
+    return_dict = {  # key为出现次数最少的元音的个数
+        1: '%s with %d occurence' % (min_cnt_vowel[0], min_num),
+        2: 'both %s and %s have %d occurrences' % (min_cnt_vowel[0], min_cnt_vowel[1], min_num),
+    }
+    return return_dict.get(len(min_cnt_vowel), 'who knows')
+
+text = 'nice to meet you'
+print(count_vowels(text))
