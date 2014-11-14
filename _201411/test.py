@@ -2,6 +2,10 @@
 import random
 a = 2
 
+#
+# 网上看到的一些小问题等
+#
+#
 
 def windex(lst): 
     '''
