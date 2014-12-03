@@ -19,7 +19,7 @@ def multiply(a, b):
 def divide(a, b):
     if b == 0:
         return 9999, 'no'
-    return a/b, str(a)+'/'+str(b)+'='+str(a/b)
+    return float(a)/float(b), str(a)+'/'+str(b)+'='+str(float(a)/float(b))
 
 
 def cal_24point(a, b, c, d):
@@ -138,13 +138,13 @@ def cal_24point(a, b, c, d):
 
 
 # ---------------------------test---------------------------------
-'''
 
-for n in range(30):
-    a = random.randint(1,13)
-    b = random.randint(1,13)
-    c = random.randint(1,13)
-    d = random.randint(1,13)
-    print(a, b, c, d)
-    print(cal_24point(a, b, c, d),'*'*10)
-'''
+if __name__ == '__main__':
+    for n in range(20):
+        a = random.randint(1,13)
+        b = random.randint(1,13)
+        c = random.randint(1,13)
+        d = random.randint(1,13)
+        print(a, b, c, d)
+        print(cal_24point(a, b, c, d),'*'*10)
+
