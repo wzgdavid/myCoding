@@ -23,12 +23,10 @@ def divide(a, b):
 
 
 def cal_24point(a, b, c, d):
-    # a, b, c, d的排列组合
-    permutation_list = list(itertools.permutations([a, b, c, d], 4))  
-    # 加减乘除 排列组合
-    op_list = list(itertools.permutations([add, minus, multiply, divide], 4))  
-    
-    # pro1 到 pro5包装函数
+    permutation_list = list(itertools.permutations([a, b, c, d], 4))
+    op_list = list(itertools.permutations([add, minus, multiply, divide], 4))
+
+    # 几种不同的运算步骤
     # ((a, b), c), d
     def pro1(op1, op2, op3):
         m = op1(pmt[0], pmt[1])
@@ -37,7 +35,7 @@ def cal_24point(a, b, c, d):
         if result[0] == 24:
             return (m[1], n[1], result[1])
 
-    # (c, (a, b)), d    
+    # (c, (a, b)), d
     def pro2(op1, op2, op3):
         m = op1(pmt[0], pmt[1])
         n = op2(pmt[2] , m[0])
@@ -67,7 +65,6 @@ def cal_24point(a, b, c, d):
         n = op2(pmt[2], pmt[3])
         result = op3(n[0], m[0])
         if result[0] == 24:
-            
             return (m[1], n[1], result[1])
 
     for pmt in permutation_list:
@@ -147,4 +144,3 @@ if __name__ == '__main__':
         d = random.randint(1,13)
         print(a, b, c, d)
         print(cal_24point(a, b, c, d),'*'*10)
-
