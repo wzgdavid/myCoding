@@ -11,16 +11,13 @@ import copy
 from bson.json_util import dumps
 
 def init():
-    #findlist=['2100409004','2100450596']
-    #mongo 54.238.211.119
-    #use logawsmaxstrikedb1a
-    #db.auth('logawsmaxstrikeuser1aOcdata','logawsmaxstrikeuPw2oa&oCdata')
+
 
 
     dbname = 'qz_stg_db'
     dbauth = 'qzstguser'
     dbpasswd = 'lB7vTBor99yYh7E3F7'
-    host = '10.200.55.32'
+    host = 'x.x.x.x'
     port = 27017
     conn = pymongo.Connection(host,port)
     db = eval('conn.%s'%dbname)

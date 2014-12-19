@@ -10,16 +10,13 @@ import traceback
 import copy
 from bson.json_util import dumps
 def init():
-    #findlist=['2100409004','2100450596']
-    #mongo 54.238.211.119
-    #use logawsmaxstrikedb1a
-    #db.auth('logawsmaxstrikeuser1aOcdata','logawsmaxstrikeuPw2oa&oCdata')
+
 
 
     dbname = 'logcnmaxstrikedb1a'
     dbauth = 'logcnmaxstrikeuser1aocdata'
     dbpasswd = 'logcnmaxstrikeuPW1oa&oCdata'
-    host = '10.161.177.73'
+    host = 'x.x.x.x'
     port = 27017
     conn = pymongo.Connection(host,port)
     db = eval('conn.%s'%dbname)
