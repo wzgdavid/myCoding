@@ -10,7 +10,7 @@ import tkFont
 
 
 class Window:
-    def __init__(self, title='机器人吉米', width=650, height=600):
+    def __init__(self, title='机器人吉米', width=800, height=600):
  
         self.w = width
         self.h = height
@@ -31,10 +31,11 @@ class Window:
  
         # 发送按钮
         self.btn_send = tk.Button(self.tkwindow, text='发送',
-                                command=self.command_send_message,
+                                command=self.__command_send_message,
                                 width=B_WIDTH, height=B_HEIGHT,relief='groove')
         self.btn_send.pack(side='right')
  
+        
  
         # 功能按钮
         #self.btn_change = tk.Button(self.tkwindow, text='换一组',
@@ -43,7 +44,7 @@ class Window:
         #self.btn_change.pack(padx=1, side='right')
  
         # 显示框
-        myFont = tkFont.Font(size=15)
+        myFont = tkFont.Font(size=16)
         self.show_text = tk.Text(self.tkwindow, height=20, font=myFont)
         self.show_text.insert(tk.INSERT, "Hello.....")
         self.show_text.insert(tk.END, "Bye Bye.....\n")
@@ -55,19 +56,31 @@ class Window:
         #self.show_text.tag_config("start", background="black", foreground="green")
  
         self.show_text.pack(side='top')
-
+        
 
         # 输入框
         self.input_text = tk.Text(self.tkwindow, height=5,  font=myFont)
         self.input_text.pack(side='top')
+        self.input_text.bind('<Key>', self.__btn_pressed)
+
+    def __btn_pressed(self, event):
+
+        print '__btn_pressed', event.keysym, type(event.keysym)
+        if event.keysym  in ['Return', 'KP_Enter']:
+            self.__command_send_message()
+         
 
     def command_num1(self):
         print 'command done'
 
-    def command_send_message(self):
+    def __command_send_message(self):
         #print tk.END, type(tk.END)
         msg = self.input_text.get('1.0', tk.END)[:-1].encode('utf-8')
         #print 'type(msg)', type(msg), msg, len(msg)
+        if '\r' in msg:
+            msg = ''.join([n for n in msg.split('\r') if n])
+        elif '\n' in msg:
+            msg = ''.join([n for n in msg.split('\n') if n])
         if not msg:
             #print 'invalid msg'
             return

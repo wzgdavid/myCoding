@@ -127,15 +127,6 @@ class TulingChat(object):
         url = 'file://' + save_path + '/temp.html'
         webbrowser.open_new(url)
 
-    # use for test
-    def send2(self, info):
-        print 'in send'
-        url = self.apiurl + 'key=' + self.key + '&info=' + info + '&userid=' +self.userid
-
-        re = urllib2.urlopen(url).read()
-        re_dict = json.loads(re)
-        
-        self.__process_return_json(re_dict)
 
     def send_message(self, msg):
         url = self.apiurl + 'key=' + self.key + '&info=' + msg + '&userid=' +self.userid
