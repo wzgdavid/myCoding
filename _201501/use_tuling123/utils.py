@@ -26,3 +26,8 @@ def pprint(obj):
 
 #d = 1,{'one': 1, 'two': False, 'three': {'one': 1, 'two': 2, 'three': 3}}
 #pprint(d)
+
+
+#把datetime转成字符串
+def datetime_toString(dt,strformat='%Y-%m-%d %H:%M:%S'):
+    return dt.strftime(strformat)

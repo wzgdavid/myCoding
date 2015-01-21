@@ -1,48 +1,52 @@
-#!/usr/bin/python
 # encoding: utf-8
 
 import os
 import json
 import urllib2
-from utils import pprint
+#from utils import pprint
 import webbrowser
 import time
 
-class Chat(object):
+
+class TulingChat(object):
 
     def __init__(self):
         self.key = "813020c042190505b8218c3be0bdca01"    # turing123网站
         self.apiurl = "http://www.tuling123.com/openapi/api?"
+        #self.apiurl = 'http://www.tuling123.com/openapi/wechatapi?'
         self.userid = '43746'
-        os.system("clear")
-        print "-------------------------------"
+        #os.system("clear")
+        #print "---------------start----------------"
 
+    # use for test
     def get(self):
         print "> ",
         info = raw_input()
+        
         if info == ('q' or 'exit' or "quit"):
             print "- Goodbye"
             return
         self.send(info)
 
+    # use for test
     def send(self, info):
         print 'in send'
         url = self.apiurl + 'key=' + self.key + '&info=' + info + '&userid=' +self.userid
-
+        print '-*-*-*-**-*-*-*-*-*', url
         re = urllib2.urlopen(url).read()
         re_dict = json.loads(re)
         
         self.__process_return_json(re_dict)
         
-        pprint(re_dict)
-        self.get()
+        #pprint(re_dict)
+        #self.get()
 
     def __process_return_json(self, re_json):
         '''处理api返回的json'''
         print re_json['text']
         if re_json['code'] == 100000:  # 返回文字
             pass
-        elif re_json['code'] == 200000:  # 链接类  百度官网
+        elif re_json['code'] == 200000:  # 链接类  百度官网 京东官网
             url  = re_json.get('url', '')
             webbrowser.open_new(url)
         elif re_json['code'] == 302000:  # 新闻   例如 输入 我想看体育新闻
@@ -60,6 +64,7 @@ class Chat(object):
             print 'hotel', '*'*50
         elif re_json['code'] == 311000:  # 价格
             print 'price', '*'*50
+            self.__process_html(re_json, 'price')
         
         # 错误码处理
         elif re_json['code'] == 40002:  # 请求内容为空 
@@ -74,8 +79,11 @@ class Chat(object):
             print '机器人设定的“学用户说话”或者“默认回答”  什么意思， 要看看返回' , '*'*50
         pass
 
+        return re_json['text']
+
     def run(self):
-        self.get()
+        #self.get()
+        self.send('你好')
 
 
     def __process_html(self, re_json, what):
@@ -101,9 +109,14 @@ class Chat(object):
                 #html of a is <a href=article['detailurl']>article['article']</a></br>
                 a = '<a href=' + article['detailurl'] + '>' + article['article'] + '</a></br>'
                 a_list.append(a)
-    
-            html = html_start + ''.join(a_list) + html_end
 
+
+        elif what == 'price':
+            for item in re_json['list']:
+                a = '<a href=' + item['detailurl'] + '>' + item['name'] + '</a>' + item['price'] + '</br>'
+                a_list.append(a)
+
+        html = html_start + ''.join(a_list) + html_end
         self.__save_html_and_open(path, html)
 
 
@@ -114,7 +127,25 @@ class Chat(object):
         url = 'file://' + save_path + '/temp.html'
         webbrowser.open_new(url)
 
+    # use for test
+    def send2(self, info):
+        print 'in send'
+        url = self.apiurl + 'key=' + self.key + '&info=' + info + '&userid=' +self.userid
+
+        re = urllib2.urlopen(url).read()
+        re_dict = json.loads(re)
+        
+        self.__process_return_json(re_dict)
+
+    def send_message(self, msg):
+        url = self.apiurl + 'key=' + self.key + '&info=' + msg + '&userid=' +self.userid
+        print '-*-*-*-**-*-*-*-*-*', url
+        re = urllib2.urlopen(url).read()
+
+        re_dict = json.loads(re)
+        
+        return self.__process_return_json(re_dict)
 
 if __name__ == "__main__":
-    chat = Chat()
+    chat = TulingChat()
     chat.run()
