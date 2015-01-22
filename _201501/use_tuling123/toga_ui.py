@@ -1,6 +1,8 @@
 # encoding: utf-8
 #from __future__ import print_function, unicode_literals, absolute_import
 
+# 问题是 怎么清除输入框， 输入框字超出框框时不会自动滚动
+
 import datetime
 import toga
 import utils
@@ -15,14 +17,17 @@ def build(app):
 
     def send_msg(widget):
         msg = input_msg.value  # type unicode
+        if len(msg) == 0: return
         #print(type(msg), '----'*10)
         now_time = utils.datetime_toString(datetime.datetime.now()).split(' ')[1]
         show_msg.value += now_time + '\n' + msg + '\n\n'
 
         chat = TulingChat()
-        rtn_msg = chat.send_message(msg.encode('utf-8'))
+        rtn_msg = chat.send_message(msg.encode('utf-8').strip())
         show_msg.value += now_time + '\n' + rtn_msg + '\n\n'
-        input_msg.value = ''
+
+        #print dir(container)
+        #print input_msg.value, 'input_msg.value'
 
     button = toga.Button(u'发送', on_press=send_msg)
     container.add(input_msg)
