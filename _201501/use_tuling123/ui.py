@@ -1,5 +1,6 @@
 # encoding: utf-8
- 
+
+# 问题是不能输入中文
 import Tkinter as tk
 import random
 import utils
@@ -76,7 +77,7 @@ class Window:
     def __command_send_message(self):
         #print tk.END, type(tk.END)
         msg = self.input_text.get('1.0', tk.END)[:-1].encode('utf-8')
-        #print 'type(msg)', type(msg), msg, len(msg)
+        print 'type(msg)', type(msg), msg, len(msg)
         if '\r' in msg:
             msg = ''.join([n for n in msg.split('\r') if n])
         elif '\n' in msg:
