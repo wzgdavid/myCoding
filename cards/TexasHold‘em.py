@@ -76,9 +76,10 @@ class TexasHold_em(Cards):
         for card in cards:
             index_list.append(self.num_list.index(self.__num(card)))
         #sorted_list = sorted(index_list)
-        index_list.sort()
+        #index_list.sort()
         s = set(index_list)
         index_list = list(s)
+        index_list.sort()
         #print index_list
         cnt = 0
         for i, item in enumerate(index_list):
@@ -150,6 +151,7 @@ class TexasHold_em(Cards):
         c = Counter(num_list)
         most_1 = c.most_common(1)[0][1]
         most_2 = c.most_common(2)[1][1]
+        # 判断顺序不能倒过来
         # 四条
         if most_1 == 4:
             return 7
@@ -185,7 +187,7 @@ class TexasHold_em(Cards):
         '''
         p1 = self.__get_points(cards_one)
         p2 = self.__get_points(cards_another)
-        #print p1, p2 ,' judge points'
+        print p1, p2 ,' judge points'
         if p1 > p2:
             return True
         elif p1 < p2:
@@ -207,6 +209,8 @@ class TexasHold_em(Cards):
             return self.__judge_full_house(cards_one, cards_another)
         elif p1 == p2 == 7:  # 比较四条大小
             return self.__judge_fourofakind(cards_one, cards_another)
+        elif p1 == p2 == 8:  # 比较同花顺大小
+            return self.__judge_flush(cards_one, cards_another)
         return True
 
     def __judge_fourofakind(self, cards_one, cards_another):
@@ -214,11 +218,11 @@ class TexasHold_em(Cards):
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
-        most_num1 = c1.most_common(1)[0][0]
+        most_num1 = self.num_list.index(c1.most_common(1)[0][0])
         num_list2 = []
         [num_list2.append(self.__num(card)) for card in cards_another]
         c2 = Counter(num_list2)
-        most_num2 = c2.most_common(1)[0][0]
+        most_num2 = self.num_list.index(c2.most_common(1)[0][0])
         if most_num1 > most_num2: #  四条不可能相等
             return True
         else: return False
@@ -237,7 +241,7 @@ class TexasHold_em(Cards):
         c2_most1_num = c2.most_common(1)[0][0]
         c2_most2_num = c2.most_common(2)[1][0]
         
-        print c1_most1_num,c1_most2_num,c2_most1_num,c2_most2_num
+        #print c1_most1_num,c1_most2_num,c2_most1_num,c2_most2_num
         if c1_most1_num > c2_most1_num:
             return True
         elif c1_most1_num < c2_most1_num:
@@ -300,11 +304,11 @@ class TexasHold_em(Cards):
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
-        pair_num1 = c1.most_common(1)[0][0]
+        pair_num1 = self.num_list.index(c1.most_common(1)[0][0])
         num_list2 = []
         [num_list2.append(self.__num(card)) for card in cards_another]
         c2 = Counter(num_list2)
-        pair_num2 = c2.most_common(1)[0][0]
+        pair_num2 = self.num_list.index(c2.most_common(1)[0][0])
         # 对子点数比大小
         if pair_num1 > pair_num2:
             return True
@@ -335,12 +339,13 @@ class TexasHold_em(Cards):
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
-        pair_num1 = c1.most_common(1)[0][0]
+        pair_num1 = self.num_list.index(c1.most_common(1)[0][0])
         num_list2 = []
         [num_list2.append(self.__num(card)) for card in cards_another]
         c2 = Counter(num_list2)
-        pair_num2 = c2.most_common(1)[0][0]
+        pair_num2 = self.num_list.index(c2.most_common(1)[0][0])
         # 对子点数比大小
+        #print pair_num1, pair_num2, '__judge_pair'
         if pair_num1 > pair_num2:
             return True
         elif pair_num1 < pair_num2:
@@ -358,9 +363,11 @@ class TexasHold_em(Cards):
         #pair_num1 = c1.most_common(1)[0][0]
         # 有3个对子时
         if c1.most_common(3)[2][1] == 2:
-            pira_num1 = [c1.most_common(3)[0][0], c1.most_common(3)[1][0], c1.most_common(3)[2][0]]
+            pair_num1 = [self.num_list.index(c1.most_common(3)[0][0]), 
+                self.num_list.index(c1.most_common(3)[1][0]), 
+                self.num_list.index(c1.most_common(3)[2][0])]
         else:
-            pira_num1 = [c1.most_common(2)[0][0], c1.most_common(2)[1][0]]
+            pair_num1 = [self.num_list.index(c1.most_common(2)[0][0]), self.num_list.index(c1.most_common(2)[1][0])]
 
 
         num_list2 = []
@@ -368,23 +375,29 @@ class TexasHold_em(Cards):
         c2 = Counter(num_list2)
         # 有3个对子时
         if c2.most_common(3)[2][1] == 2:
-            pira_num2 = [c2.most_common(3)[0][0], c2.most_common(3)[1][0], c2.most_common(3)[2][0]]
+            pair_num2 = [self.num_list.index(c2.most_common(3)[0][0]), 
+                self.num_list.index(c2.most_common(3)[1][0]), 
+                self.num_list.index(c2.most_common(3)[2][0])]
         else:
-            pira_num2 = [c2.most_common(2)[0][0], c2.most_common(2)[1][0]]
+            pair_num2 = [self.num_list.index(c2.most_common(2)[0][0]), self.num_list.index(c2.most_common(2)[1][0])]
 
-        sotred1 = sorted(pira_num1, reverse=True)
-        sotred2 = sorted(pira_num2, reverse=True)
+        sorted1 = sorted(pair_num1, reverse=True)
+        sorted2 = sorted(pair_num2, reverse=True)
+        #print pair_num1, pair_num2, 'twp pairs pair_num1 and 2' # 要用index
+        #print sorted1, sorted2, 'twp pairs sorted1 and 2'
         for n in [0,1]:
-            if sotred1[n] >sotred2[n]:
+            if sorted1[n] >sorted2[n]:
                 
                 return True
-            elif sotred1[n] < sotred2[n]:
+            elif sorted1[n] < sorted2[n]:
                 return False
+            else:
+                continue
         # 到这里是两对的大小一样， 需要比较除了两对之外最大的一张牌
-        c1 = self.__remove_num(cards_one, sotred1[0])
-        c1 = self.__remove_num(c1, sotred1[1])
-        c2 = self.__remove_num(cards_another, sotred1[0])
-        c2 = self.__remove_num(c2, sotred1[1])
+        c1 = self.__remove_num(cards_one, sorted1[0])
+        c1 = self.__remove_num(c1, sorted1[1])
+        c2 = self.__remove_num(cards_another, sorted1[0])
+        c2 = self.__remove_num(c2, sorted1[1])
         return self.__judge_gaopai(c1, c2, num=1)
 
     #def __has_card(self, cards)
@@ -406,36 +419,49 @@ class TexasHold_em(Cards):
         return rtn_cards
 
     def test(self):
-        cards1 = self.get_random_cards(7)
-        cards1 = ['c_7', 'c_7', 'c_7', 'c_7', 'c_4', 'd_J', 'h_8']
-        cards2 = ['c_6', 'c_6', 'c_6', 'c_6', 'c_4', 'd_A', 'h_8']
-        print cards1,cards2, self.__judge_fourofakind(cards1, cards2), '-----'
+        # unit test
+        #cards1 = self.get_random_cards(7)
+        #cards1 = ['s_A', 'c_A', 'h_A', 'c_Q', 'c_10', 'c_3', 's_K']  # 
+        #cards2 = ['c_4', 'd_K', 'h_7', 'c_Q', 'c_10', 'c_K', 's_K']  # 
+        #print cards1,cards2, self.__judge_threeofakind(cards1, cards2), '-----'
+
+        #print self.__has_straight_flush(cards2), 'if has straight'
+
+
+
         '''
         my_cards手里指定牌，看与n个人玩的胜率
         '''
-        #my_cards = []
-        #op_cards = []
+        my_cards = []
+        op_cards = []
         #op_cards2 = []
         #op_cards3 = []
-        #my_cards.append(self.get_card('s_3'))
-        #my_cards.append(self.get_card('c_3'))
-        #op_cards.extend(self.get_random_cards(2))
+        # 我的指定手牌
+        my_cards.append(self.get_card('s_A'))
+        my_cards.append(self.get_card('c_A'))
+
+        #my_cards.extend(self.get_random_cards(2))
+        op_cards.extend(self.get_random_cards(2))
         #op_cards2.extend(self.get_random_cards(2))
-        ##op_cards3.extend(self.get_random_cards(2))
-#
-        #public_cards = self.get_random_cards(5)
-#
-        #my_pk_cards = my_cards + public_cards
-        #op_pk_cards = op_cards + public_cards
+        #op_cards3.extend(self.get_random_cards(2))
+
+        public_cards = self.get_random_cards(5)
+
+        my_pk_cards = my_cards + public_cards
+        op_pk_cards = op_cards + public_cards
         #op_pk_cards2 = op_cards2 + public_cards
-        ##op_pk_cards3 = op_cards3 + public_cards
-        ##print my_pk_cards, op_pk_cards, '  **********pk cards'
-        #result1 = self.judge(my_pk_cards, op_pk_cards)
+        #op_pk_cards3 = op_cards3 + public_cards
+        
+        result1 = self.judge(my_pk_cards, op_pk_cards)
+        
+        print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
+        return result1
         #result2 = self.judge(my_pk_cards, op_pk_cards2)
-        ##result3 = self.judge(my_pk_cards, op_pk_cards3)
-        ##print result
-        #return all([result1, result2])
-        #print cards1,cards2, self.__judge_straight(cards1, cards2), '-----'
+        #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
+        #result3 = self.judge(my_pk_cards, op_pk_cards3)
+        #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
+        #return all([result1, result2, result3])
+
 
 
 if __name__ == '__main__':
@@ -443,10 +469,10 @@ if __name__ == '__main__':
     z = TexasHold_em()
     #print z.cards
     my_win_cnt = 0
-    for n in range(1):
+    for n in range(100):
 
-        #if z.test():
-        #    my_win_cnt += 1
-        z.test()
+        if z.test():
+            my_win_cnt += 1
+        #z.test()
         z.shuffle()
     print my_win_cnt
