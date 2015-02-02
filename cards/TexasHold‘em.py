@@ -187,7 +187,7 @@ class TexasHold_em(Cards):
         '''
         p1 = self.__get_points(cards_one)
         p2 = self.__get_points(cards_another)
-        print p1, p2 ,' judge points'
+        #print p1, p2 ,' judge points'
         if p1 > p2:
             return True
         elif p1 < p2:
@@ -232,14 +232,14 @@ class TexasHold_em(Cards):
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
-        c1_most1_num = c1.most_common(1)[0][0]
-        c1_most2_num = c1.most_common(2)[1][0]
+        c1_most1_num = self.num_list.index(c1.most_common(1)[0][0])
+        c1_most2_num = self.num_list.index(c1.most_common(2)[1][0])
 
         num_list2 = []
         [num_list2.append(self.__num(card)) for card in cards_another]
         c2 = Counter(num_list2)
-        c2_most1_num = c2.most_common(1)[0][0]
-        c2_most2_num = c2.most_common(2)[1][0]
+        c2_most1_num = self.num_list.index(c2.most_common(1)[0][0])
+        c2_most2_num = self.num_list.index(c2.most_common(2)[1][0])
         
         #print c1_most1_num,c1_most2_num,c2_most1_num,c2_most2_num
         if c1_most1_num > c2_most1_num:
@@ -421,9 +421,9 @@ class TexasHold_em(Cards):
     def test(self):
         # unit test
         #cards1 = self.get_random_cards(7)
-        #cards1 = ['s_A', 'c_A', 'h_A', 'c_Q', 'c_10', 'c_3', 's_K']  # 
-        #cards2 = ['c_4', 'd_K', 'h_7', 'c_Q', 'c_10', 'c_K', 's_K']  # 
-        #print cards1,cards2, self.__judge_threeofakind(cards1, cards2), '-----'
+        #cards1 = ['s_A', 'c_A', 'h_7', 's_7', 'c_Q', 'd_7', 'c_K']  # 
+        #cards2 = ['s_K', 'd_8', 'h_7', 's_7', 'c_Q', 'd_7', 'c_K']  # 
+        #print cards1,cards2, self.judge(cards1, cards2), '-----'
 
         #print self.__has_straight_flush(cards2), 'if has straight'
 
@@ -434,33 +434,37 @@ class TexasHold_em(Cards):
         '''
         my_cards = []
         op_cards = []
-        #op_cards2 = []
-        #op_cards3 = []
+        op_cards2 = []
+        op_cards3 = []
+        op_cards4 = []
         # 我的指定手牌
-        my_cards.append(self.get_card('s_A'))
-        my_cards.append(self.get_card('c_A'))
+        my_cards.append(self.get_card('s_K'))
+        my_cards.append(self.get_card('c_K'))
 
         #my_cards.extend(self.get_random_cards(2))
         op_cards.extend(self.get_random_cards(2))
-        #op_cards2.extend(self.get_random_cards(2))
-        #op_cards3.extend(self.get_random_cards(2))
+        op_cards2.extend(self.get_random_cards(2))
+        op_cards3.extend(self.get_random_cards(2))
+        op_cards4.extend(self.get_random_cards(2))
 
         public_cards = self.get_random_cards(5)
 
         my_pk_cards = my_cards + public_cards
         op_pk_cards = op_cards + public_cards
-        #op_pk_cards2 = op_cards2 + public_cards
-        #op_pk_cards3 = op_cards3 + public_cards
-        
+        op_pk_cards2 = op_cards2 + public_cards
+        op_pk_cards3 = op_cards3 + public_cards
+        op_pk_cards4 = op_cards4 + public_cards
+
         result1 = self.judge(my_pk_cards, op_pk_cards)
         
-        print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
-        return result1
-        #result2 = self.judge(my_pk_cards, op_pk_cards2)
+        #print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
+        #return result1
+        result2 = self.judge(my_pk_cards, op_pk_cards2)
         #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
-        #result3 = self.judge(my_pk_cards, op_pk_cards3)
+        result3 = self.judge(my_pk_cards, op_pk_cards3)
         #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
-        #return all([result1, result2, result3])
+        result4 = self.judge(my_pk_cards, op_pk_cards4)
+        return all([result1, result2, result3, result4])
 
 
 
@@ -469,10 +473,10 @@ if __name__ == '__main__':
     z = TexasHold_em()
     #print z.cards
     my_win_cnt = 0
-    for n in range(100):
-
+    for n in range(10000):
+        #print n
         if z.test():
             my_win_cnt += 1
         #z.test()
         z.shuffle()
-    print my_win_cnt
+    print my_win_cnt, 'my_win_cnt'
