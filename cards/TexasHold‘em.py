@@ -22,16 +22,6 @@ class Cards(object):
         for s in suits:
             for n in num:
                 self.cards.append(s+'_'+n)
-                #self.obj_cards.append(Card(s, n))
-
-
-class Card(object):
-    '''一张牌'''
-    def __init__(self, suit, num):
-        self.suit = suit
-        self.num = num
-        #self.card = self.__card_str()
-    #def __card_str(self):
 
 
 class TexasHold_em(Cards):
@@ -75,25 +65,19 @@ class TexasHold_em(Cards):
         index_list = []
         for card in cards:
             index_list.append(self.num_list.index(self.__num(card)))
-        #sorted_list = sorted(index_list)
-        #index_list.sort()
         s = set(index_list)
         index_list = list(s)
         index_list.sort()
-        #print index_list
         cnt = 0
         for i, item in enumerate(index_list):
-
             if i == 0:continue
             if index_list[i-1] + 1 == item:
-
                 cnt += 1
                 if cnt >= 4:
                     return 4
             else:
                 cnt = 0
             #print i,item,'  cnt:',cnt,'in for'
-
         return 0
 
     def __has_royal_flush(self, cards):
@@ -104,9 +88,7 @@ class TexasHold_em(Cards):
         '''同花顺'''
         if not self.__has_flush(cards) or not self.__has_straight(cards):
             return 0
-
         suit_list = []
-
         # 确定同花的花色
         [suit_list.append(self.__suit(card)) for card in cards]
         c = Counter(suit_list)
@@ -117,7 +99,6 @@ class TexasHold_em(Cards):
             if self.__suit(card) == most_suit:
                 item = self.__suit(card), self.num_list.index(self.__num(card))
                 index_list.append(item)
-
         # 排序
         sorted_list = sorted(index_list, key=itemgetter(1))
         cnt = 0
@@ -127,7 +108,6 @@ class TexasHold_em(Cards):
             # 后一项比前一项大1
             if sorted_list[i-1][1] + 1 == item[1]:
                 cnt += 1
-
                 if cnt >= 4:    
                     return 8
             else:
@@ -145,7 +125,7 @@ class TexasHold_em(Cards):
         return 0
 
     def __has_same_num(self, cards):
-        '''判断几个相同点数的牌型，比如 对子， 三条等'''
+        '''判断几个相同点数的牌型，比如 对子， 三条等,逻辑相同'''
         num_list = []
         [num_list.append(self.__num(card)) for card in cards]
         c = Counter(num_list)
@@ -214,7 +194,7 @@ class TexasHold_em(Cards):
         return True
 
     def __judge_fourofakind(self, cards_one, cards_another):
-        '''比较两幅 四条 大小''' # test ok
+        '''比较两幅 四条 大小'''
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
@@ -228,7 +208,7 @@ class TexasHold_em(Cards):
         else: return False
 
     def __judge_full_house(self, cards_one, cards_another):
-        '''比较两幅 俘虏 大小''' # test ok
+        '''比较两幅 俘虏 大小'''
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
@@ -254,7 +234,7 @@ class TexasHold_em(Cards):
         return True
 
     def __judge_flush(self, cards_one, cards_another):
-        '''比较两幅 同花 大小''' # test ok
+        '''比较两幅 同花 大小'''
         # 获取同花的花色
         suit_list = []
         [suit_list.append(self.__suit(card)) for card in cards_one]
@@ -268,19 +248,19 @@ class TexasHold_em(Cards):
 
     def __get_suit_cards(self, cards, suit):
         '''获取指定花色的牌'''
-        rtn_cards = []        
+        rtn_cards = []
         [rtn_cards.append(card) for card in cards if self.__suit(card) == suit]
         return rtn_cards
 
     def __judge_straight(self, cards_one, cards_another):
-        '''比较两幅 普通顺子 大小'''# test ok
+        '''比较两幅 普通顺子 大小'''
         max_num = [0,0] # 两幅顺子中最大的那个数
         for i, cards in enumerate([cards_one, cards_another]):
             index_list = []
             for card in cards:
                 index_list.append(self.num_list.index(self.__num(card)))
             sorted_list = sorted(index_list)
-            #s = set(sorted_list)
+
             #print 'sorted_list*********-*-',sorted_list
             index_list = list(set(sorted_list))
             #print 'index_list*********-*-',index_list
@@ -299,8 +279,7 @@ class TexasHold_em(Cards):
         else: return False
 
     def __judge_threeofakind(self, cards_one, cards_another):
-        '''# 比较两幅三条大小
-        '''# test ok
+        '''# 比较两幅三条大小'''
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
@@ -322,7 +301,7 @@ class TexasHold_em(Cards):
     def __judge_gaopai(self, cards_one, cards_another, num=5):
         '''比较两幅高牌大小
         num为比较几张牌
-        '''# test ok
+        '''
         lst1 = self.__sorted_cards(cards_one)
         lst2 = self.__sorted_cards(cards_another)
         for n in range(num):
@@ -335,7 +314,7 @@ class TexasHold_em(Cards):
         return True
 
     def __judge_pair(self, cards_one, cards_another):
-        '''比较两幅对子大小'''# 应该是去掉对子比3张大牌的大小 # test ok
+        '''比较两幅对子大小'''# 应该是去掉对子比3张大牌的大小
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
@@ -356,27 +335,26 @@ class TexasHold_em(Cards):
             return self.__judge_gaopai(c1, c2, num=3)
 
     def __judge_two_pairs(self, cards_one, cards_another):
-        '''比较两幅 两对大小'''# test ok
+        '''比较两幅 两对大小'''
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
         #pair_num1 = c1.most_common(1)[0][0]
         # 有3个对子时
         if c1.most_common(3)[2][1] == 2:
-            pair_num1 = [self.num_list.index(c1.most_common(3)[0][0]), 
-                self.num_list.index(c1.most_common(3)[1][0]), 
+            pair_num1 = [self.num_list.index(c1.most_common(3)[0][0]),
+                self.num_list.index(c1.most_common(3)[1][0]),
                 self.num_list.index(c1.most_common(3)[2][0])]
         else:
             pair_num1 = [self.num_list.index(c1.most_common(2)[0][0]), self.num_list.index(c1.most_common(2)[1][0])]
-
 
         num_list2 = []
         [num_list2.append(self.__num(card)) for card in cards_another]
         c2 = Counter(num_list2)
         # 有3个对子时
         if c2.most_common(3)[2][1] == 2:
-            pair_num2 = [self.num_list.index(c2.most_common(3)[0][0]), 
-                self.num_list.index(c2.most_common(3)[1][0]), 
+            pair_num2 = [self.num_list.index(c2.most_common(3)[0][0]),
+                self.num_list.index(c2.most_common(3)[1][0]),
                 self.num_list.index(c2.most_common(3)[2][0])]
         else:
             pair_num2 = [self.num_list.index(c2.most_common(2)[0][0]), self.num_list.index(c2.most_common(2)[1][0])]
@@ -387,7 +365,6 @@ class TexasHold_em(Cards):
         #print sorted1, sorted2, 'twp pairs sorted1 and 2'
         for n in [0,1]:
             if sorted1[n] >sorted2[n]:
-                
                 return True
             elif sorted1[n] < sorted2[n]:
                 return False
@@ -400,7 +377,6 @@ class TexasHold_em(Cards):
         c2 = self.__remove_num(c2, sorted1[1])
         return self.__judge_gaopai(c1, c2, num=1)
 
-    #def __has_card(self, cards)
     def __sorted_cards(self, cards):
         '''排序返回牌的点数'''
         card_nums = []
@@ -427,8 +403,6 @@ class TexasHold_em(Cards):
 
         #print self.__has_straight_flush(cards2), 'if has straight'
 
-
-
         '''
         my_cards手里指定牌，看与n个人玩的胜率
         '''
@@ -436,16 +410,18 @@ class TexasHold_em(Cards):
         op_cards = []
         op_cards2 = []
         op_cards3 = []
-        op_cards4 = []
+        #op_cards4 = []
         # 我的指定手牌
-        my_cards.append(self.get_card('s_K'))
-        my_cards.append(self.get_card('c_K'))
+        #my_cards.append(self.get_card('s_A'))
+        #my_cards.append(self.get_card('c_A'))
 
-        #my_cards.extend(self.get_random_cards(2))
+        # 我也随机
+        my_cards.extend(self.get_random_cards(2))
+
         op_cards.extend(self.get_random_cards(2))
         op_cards2.extend(self.get_random_cards(2))
         op_cards3.extend(self.get_random_cards(2))
-        op_cards4.extend(self.get_random_cards(2))
+        #op_cards4.extend(self.get_random_cards(2))
 
         public_cards = self.get_random_cards(5)
 
@@ -453,7 +429,7 @@ class TexasHold_em(Cards):
         op_pk_cards = op_cards + public_cards
         op_pk_cards2 = op_cards2 + public_cards
         op_pk_cards3 = op_cards3 + public_cards
-        op_pk_cards4 = op_cards4 + public_cards
+        #op_pk_cards4 = op_cards4 + public_cards
 
         result1 = self.judge(my_pk_cards, op_pk_cards)
         
@@ -463,9 +439,8 @@ class TexasHold_em(Cards):
         #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
         result3 = self.judge(my_pk_cards, op_pk_cards3)
         #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
-        result4 = self.judge(my_pk_cards, op_pk_cards4)
-        return all([result1, result2, result3, result4])
-
+        #result4 = self.judge(my_pk_cards, op_pk_cards4)
+        return all([result1, result2, result3])
 
 
 if __name__ == '__main__':
