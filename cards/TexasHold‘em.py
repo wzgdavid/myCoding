@@ -77,7 +77,6 @@ class TexasHold_em(Cards):
                     return 4
             else:
                 cnt = 0
-            #print i,item,'  cnt:',cnt,'in for'
         return 0
 
     def __has_royal_flush(self, cards):
@@ -102,7 +101,6 @@ class TexasHold_em(Cards):
         # 排序
         sorted_list = sorted(index_list, key=itemgetter(1))
         cnt = 0
-        #print sorted_list, 'sorted_list******-*-*'
         for i, item in enumerate(sorted_list):
             if i == 0:continue
             # 后一项比前一项大1
@@ -112,7 +110,6 @@ class TexasHold_em(Cards):
                     return 8
             else:
                 cnt = 0
-            #print i,item,'  cnt:',cnt,'in for'
         return 0
 
     def __has_flush(self, cards):
@@ -221,7 +218,6 @@ class TexasHold_em(Cards):
         c2_most1_num = self.num_list.index(c2.most_common(1)[0][0])
         c2_most2_num = self.num_list.index(c2.most_common(2)[1][0])
         
-        #print c1_most1_num,c1_most2_num,c2_most1_num,c2_most2_num
         if c1_most1_num > c2_most1_num:
             return True
         elif c1_most1_num < c2_most1_num:
@@ -260,10 +256,7 @@ class TexasHold_em(Cards):
             for card in cards:
                 index_list.append(self.num_list.index(self.__num(card)))
             sorted_list = sorted(index_list)
-
-            #print 'sorted_list*********-*-',sorted_list
             index_list = list(set(sorted_list))
-            #print 'index_list*********-*-',index_list
             for n in range(len(index_list) - 4):
                 if all([
                     index_list[n] +1 == index_list[n+1],
@@ -271,9 +264,7 @@ class TexasHold_em(Cards):
                     index_list[n] +3 == index_list[n+3],
                     index_list[n] +4 == index_list[n+4]]
                     ):
-                    #print index_list[n+4], 'index_list[n+4]', i
                     max_num[i] = index_list[n+4]
-        #print 'max_num', max_num
         if max_num[0] >= max_num[1]:
             return True
         else: return False
@@ -305,9 +296,7 @@ class TexasHold_em(Cards):
         lst1 = self.__sorted_cards(cards_one)
         lst2 = self.__sorted_cards(cards_another)
         for n in range(num):
-            #print lst1[n] ,lst2[n]
             if lst1[n] >lst2[n]:
-                
                 return True
             elif lst1[n] < lst2[n]:
                 return False
@@ -324,7 +313,6 @@ class TexasHold_em(Cards):
         c2 = Counter(num_list2)
         pair_num2 = self.num_list.index(c2.most_common(1)[0][0])
         # 对子点数比大小
-        #print pair_num1, pair_num2, '__judge_pair'
         if pair_num1 > pair_num2:
             return True
         elif pair_num1 < pair_num2:
@@ -361,8 +349,6 @@ class TexasHold_em(Cards):
 
         sorted1 = sorted(pair_num1, reverse=True)
         sorted2 = sorted(pair_num2, reverse=True)
-        #print pair_num1, pair_num2, 'twp pairs pair_num1 and 2' # 要用index
-        #print sorted1, sorted2, 'twp pairs sorted1 and 2'
         for n in [0,1]:
             if sorted1[n] >sorted2[n]:
                 return True
@@ -408,8 +394,8 @@ class TexasHold_em(Cards):
         '''
         my_cards = []
         op_cards = []
-        op_cards2 = []
-        op_cards3 = []
+        #op_cards2 = []
+        #op_cards3 = []
         #op_cards4 = []
         # 我的指定手牌
         #my_cards.append(self.get_card('s_A'))
@@ -419,39 +405,38 @@ class TexasHold_em(Cards):
         my_cards.extend(self.get_random_cards(2))
 
         op_cards.extend(self.get_random_cards(2))
-        op_cards2.extend(self.get_random_cards(2))
-        op_cards3.extend(self.get_random_cards(2))
+        #op_cards2.extend(self.get_random_cards(2))
+        #op_cards3.extend(self.get_random_cards(2))
         #op_cards4.extend(self.get_random_cards(2))
 
         public_cards = self.get_random_cards(5)
 
         my_pk_cards = my_cards + public_cards
         op_pk_cards = op_cards + public_cards
-        op_pk_cards2 = op_cards2 + public_cards
-        op_pk_cards3 = op_cards3 + public_cards
+        #op_pk_cards2 = op_cards2 + public_cards
+        #op_pk_cards3 = op_cards3 + public_cards
         #op_pk_cards4 = op_cards4 + public_cards
 
         result1 = self.judge(my_pk_cards, op_pk_cards)
-        
+        return result1
         #print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
-        #return result1
-        result2 = self.judge(my_pk_cards, op_pk_cards2)
+        
+        #result2 = self.judge(my_pk_cards, op_pk_cards2)
         #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
-        result3 = self.judge(my_pk_cards, op_pk_cards3)
+        #return all([result1, result2])
+
+        #result3 = self.judge(my_pk_cards, op_pk_cards3)
         #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
+        #return all([result1, result2, result3])
         #result4 = self.judge(my_pk_cards, op_pk_cards4)
-        return all([result1, result2, result3])
 
 
 if __name__ == '__main__':
 
     z = TexasHold_em()
-    #print z.cards
     my_win_cnt = 0
     for n in range(10000):
-        #print n
         if z.test():
             my_win_cnt += 1
-        #z.test()
         z.shuffle()
     print my_win_cnt, 'my_win_cnt'
