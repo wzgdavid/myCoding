@@ -22,7 +22,7 @@ class Cards(object):
         for s in suits:
             for n in num:
                 self.cards.append(s+'_'+n)
-
+        return self.cards
 
 class TexasHold_em(Cards):
     #num_list = ['2', '3','4','5','6','7','8','9','10','J','Q','K','A']
@@ -169,24 +169,24 @@ class TexasHold_em(Cards):
             return True
         elif p1 < p2:
             return False
-
-        if p1 == p2 == 0: # 比较高牌
+        # p1 == p2 时 同牌型再比大小
+        if p1 == 0: # 比较高牌
             return self.__judge_gaopai(cards_one, cards_another)
-        elif p1 == p2 == 1:  # 比较对子大小
+        elif p1 == 1:  # 比较对子大小
             return self.__judge_pair(cards_one, cards_another)
-        elif p1 == p2 == 2:  # 比较两对大小
+        elif p1 == 2:  # 比较两对大小
             return self.__judge_two_pairs(cards_one, cards_another)
-        elif p1 == p2 == 3:  # 比较三条大小
+        elif p1 == 3:  # 比较三条大小
             return self.__judge_threeofakind(cards_one, cards_another)
-        elif p1 == p2 == 4:  # 比较普通顺子大小
+        elif p1 == 4:  # 比较普通顺子大小
             return self.__judge_straight(cards_one, cards_another)
-        elif p1 == p2 == 5:  # 比较同花大小
+        elif p1 == 5:  # 比较同花大小
             return self.__judge_flush(cards_one, cards_another)
-        elif p1 == p2 == 6:  # 比较俘虏大小
+        elif p1 == 6:  # 比较俘虏大小
             return self.__judge_full_house(cards_one, cards_another)
-        elif p1 == p2 == 7:  # 比较四条大小
+        elif p1 == 7:  # 比较四条大小
             return self.__judge_fourofakind(cards_one, cards_another)
-        elif p1 == p2 == 8:  # 比较同花顺大小
+        elif p1 == 8:  # 比较同花顺大小
             return self.__judge_flush(cards_one, cards_another)
         return True
 
@@ -327,7 +327,6 @@ class TexasHold_em(Cards):
         num_list1 = []
         [num_list1.append(self.__num(card)) for card in cards_one]
         c1 = Counter(num_list1)
-        #pair_num1 = c1.most_common(1)[0][0]
         # 有3个对子时
         if c1.most_common(3)[2][1] == 2:
             pair_num1 = [self.num_list.index(c1.most_common(3)[0][0]),
@@ -391,52 +390,166 @@ class TexasHold_em(Cards):
 
         '''
         my_cards手里指定牌，看与n个人玩的胜率
+        (没有公共牌时)
         '''
-        my_cards = []
-        op_cards = []
-        #op_cards2 = []
-        #op_cards3 = []
-        #op_cards4 = []
-        # 我的指定手牌
-        #my_cards.append(self.get_card('s_A'))
-        #my_cards.append(self.get_card('c_A'))
+        if False:
+            my_cards = []
+            op_cards = []
+            #op_cards2 = []
+            #op_cards3 = []
+            #op_cards4 = []
+            # 我的指定手牌
+            my_cards.append(self.get_card('s_K'))
+            my_cards.append(self.get_card('c_J'))
+    
+            # 我也随机
+            #my_cards.extend(self.get_random_cards(2))
+    
+            op_cards.extend(self.get_random_cards(2))
+            #op_cards2.extend(self.get_random_cards(2))
+            #op_cards3.extend(self.get_random_cards(2))
+            #op_cards4.extend(self.get_random_cards(2))
+    
+            public_cards = self.get_random_cards(5)
+    
+            my_pk_cards = my_cards + public_cards
+            op_pk_cards = op_cards + public_cards
+            #op_pk_cards2 = op_cards2 + public_cards
+            #op_pk_cards3 = op_cards3 + public_cards
+            #op_pk_cards4 = op_cards4 + public_cards
+    
+            result1 = self.judge(my_pk_cards, op_pk_cards)
+            return result1
+            #print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
+            
+            #result2 = self.judge(my_pk_cards, op_pk_cards2)
+            #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
+            #return all([result1, result2])
+    
+            #result3 = self.judge(my_pk_cards, op_pk_cards3)
+            #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
+            #return all([result1, result2, result3])
+            #result4 = self.judge(my_pk_cards, op_pk_cards4)
 
-        # 我也随机
-        my_cards.extend(self.get_random_cards(2))
+        '''
+        有三张公共牌时
 
-        op_cards.extend(self.get_random_cards(2))
-        #op_cards2.extend(self.get_random_cards(2))
-        #op_cards3.extend(self.get_random_cards(2))
-        #op_cards4.extend(self.get_random_cards(2))
+        '''
 
-        public_cards = self.get_random_cards(5)
+        if True:
+            my_cards = []
+            op_cards = []
+            op_cards2 = []
+            #op_cards3 = []
+            #op_cards4 = []
+            # 我的指定手牌
+            my_cards.append(self.get_card('s_J'))
+            my_cards.append(self.get_card('c_A'))
 
-        my_pk_cards = my_cards + public_cards
-        op_pk_cards = op_cards + public_cards
-        #op_pk_cards2 = op_cards2 + public_cards
-        #op_pk_cards3 = op_cards3 + public_cards
-        #op_pk_cards4 = op_cards4 + public_cards
+            #公共牌
+            flop = []
+            flop.extend([self.get_card('h_5'), self.get_card('d_8'), self.get_card('h_J')])
+            public_cards = flop + self.get_random_cards(2)
+            #print public_cards, 'public_cards'
+            # 我也随机
+            #my_cards.extend(self.get_random_cards(2))
+    
+            op_cards.extend(self.get_random_cards(2))
+            op_cards2.extend(self.get_random_cards(2))
+            #op_cards3.extend(self.get_random_cards(2))
+            #op_cards4.extend(self.get_random_cards(2))
+            
 
-        result1 = self.judge(my_pk_cards, op_pk_cards)
-        return result1
-        #print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
+            my_pk_cards = my_cards + public_cards
+            op_pk_cards = op_cards + public_cards
+            op_pk_cards2 = op_cards2 + public_cards
+            #op_pk_cards3 = op_cards3 + public_cards
+            #op_pk_cards4 = op_cards4 + public_cards
+    
+            result1 = self.judge(my_pk_cards, op_pk_cards)
+            #return result1
+            #print my_pk_cards, op_pk_cards, result1, '  **********pk cards'
+            
+            result2 = self.judge(my_pk_cards, op_pk_cards2)
+            #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
+
+            return all([result1, result2])
+    
+            #result3 = self.judge(my_pk_cards, op_pk_cards3)
+            #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
+            #return all([result1, result2, result3])
+            #result4 = self.judge(my_pk_cards, op_pk_cards4)
+
+    def win(self, player_num, public_cards, my_pocket_cards):
+        '''
+        模拟自己特定的牌,计算胜负
+        '''
+        pocket_cards_list = []   # 各个玩家的底牌, [0]是自己
+        pk_cards_list = []       # pk用的牌
+
+        # 先发指定的牌 以免引起重复
+        # 发自己的底牌
+        for n in range(player_num):
+            if n == 0:
+                pocket_cards_list.append([self.get_card(my_pocket_cards[0]), self.get_card(my_pocket_cards[1])])
+
+        # 发公共牌
+        public_cards_num = len(public_cards)
+        if public_cards_num == 0:
+            public_cards = self.get_random_cards(5)
+        elif public_cards_num == 3:
+            #print 'public num is 3'
+            public_cards.extend([self.get_card(public_cards[0]), self.get_card(public_cards[1]), self.get_card(public_cards[2])])
+            public_cards += self.get_random_cards(2)
+            [public_cards.pop(0) for n in range(public_cards_num)]
+        elif public_cards_num == 4:
+            #print 'public num is 4'
+            public_cards.extend([self.get_card(public_cards[0]), self.get_card(public_cards[1]), self.get_card(public_cards[2]), self.get_card(public_cards[3]) ])
+            public_cards += self.get_random_cards(1)
+            [public_cards.pop(0) for n in range(public_cards_num)]
+        elif public_cards_num == 5:
+            #print 'public num is 5'
+            public_cards.extend([self.get_card(public_cards[0]), self.get_card(public_cards[1]), self.get_card(public_cards[2]), self.get_card(public_cards[3]), self.get_card(public_cards[4]) ])
+            [public_cards.pop(0) for n in range(public_cards_num)]
+        #print public_cards, ' is public_cards'
+        # 发其他底牌
+        for n in range(player_num):
+
+            if n > 0:
+                pocket_cards_list.append(self.get_random_cards(2))
+        #print pocket_cards_list, ' pocket_cards_list'
+        # make pk cards
+        for pocket_cards in pocket_cards_list:
+            pk_cards_list.append(pocket_cards + public_cards)
         
-        #result2 = self.judge(my_pk_cards, op_pk_cards2)
-        #print my_pk_cards, op_pk_cards2, result2, '  **********pk cards'
-        #return all([result1, result2])
+        #print pk_cards_list
 
-        #result3 = self.judge(my_pk_cards, op_pk_cards3)
-        #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
-        #return all([result1, result2, result3])
-        #result4 = self.judge(my_pk_cards, op_pk_cards4)
+        # pk
+        result = []
+        for n in range(1, len(pk_cards_list)):
+            result.append(self.judge(pk_cards_list[0], pk_cards_list[n]))
+        return all(result)
 
+    def cal_rate(self, player_num, public_cards, my_pocket_cards, run_times=1000):
+        '''计算跑 n 次赢的次数'''
+        my_win_cnt = 0
+        for n in range(run_times):
+            if self.win(player_num, public_cards, my_pocket_cards):
+                my_win_cnt += 1
+            self.shuffle()
+        return my_win_cnt
 
 if __name__ == '__main__':
 
     z = TexasHold_em()
-    my_win_cnt = 0
-    for n in range(10000):
-        if z.test():
-            my_win_cnt += 1
-        z.shuffle()
-    print my_win_cnt, 'my_win_cnt'
+    #my_win_cnt = 0
+    #for n in range(10000):
+    #    if z.test():
+    #        my_win_cnt += 1
+    #    z.shuffle()
+    #print my_win_cnt, 'my_win_cnt'
+    
+    #['c_2', 'c_4', 'h_8', 'h_10', 'd_8']
+    print z.cal_rate(6, [], ['s_K','c_K'])
+    #z.cal_rate(2, [], ['s_3','s_J'])
+    #print z.cal_rate()
