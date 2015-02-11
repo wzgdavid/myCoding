@@ -388,11 +388,17 @@ class TexasHold_em(Cards):
 
         #print self.__has_straight_flush(cards2), 'if has straight'
 
+#Flop round 翻牌圈 - 首三张公共牌出现以后的押注圈
+#
+#Turn round 转牌圈 - 第四张公共牌出现以后的押注圈
+#
+#River round 河牌圈 - 第五张公共牌出现以后 , 也即是摊牌以前的押注圈
+
         '''
         my_cards手里指定牌，看与n个人玩的胜率
         (没有公共牌时)
         '''
-        if False:
+        if 0:
             my_cards = []
             op_cards = []
             #op_cards2 = []
@@ -400,12 +406,14 @@ class TexasHold_em(Cards):
             #op_cards4 = []
             # 我的指定手牌
             my_cards.append(self.get_card('s_K'))
-            my_cards.append(self.get_card('c_J'))
+            my_cards.append(self.get_card('c_K'))
     
             # 我也随机
             #my_cards.extend(self.get_random_cards(2))
     
-            op_cards.extend(self.get_random_cards(2))
+            #op_cards.extend(self.get_random_cards(2))
+            op_cards.append(self.get_card('h_A'))
+            op_cards.append(self.get_card('d_2'))
             #op_cards2.extend(self.get_random_cards(2))
             #op_cards3.extend(self.get_random_cards(2))
             #op_cards4.extend(self.get_random_cards(2))
@@ -436,7 +444,7 @@ class TexasHold_em(Cards):
 
         '''
 
-        if True:
+        if 1:
             my_cards = []
             op_cards = []
             op_cards2 = []
@@ -444,11 +452,11 @@ class TexasHold_em(Cards):
             #op_cards4 = []
             # 我的指定手牌
             my_cards.append(self.get_card('s_J'))
-            my_cards.append(self.get_card('c_A'))
+            my_cards.append(self.get_card('d_8'))
 
             #公共牌
             flop = []
-            flop.extend([self.get_card('h_5'), self.get_card('d_8'), self.get_card('h_J')])
+            flop.extend([self.get_card('d_10'), self.get_card('d_3'), self.get_card('d_4')])
             public_cards = flop + self.get_random_cards(2)
             #print public_cards, 'public_cards'
             # 我也随机
@@ -526,11 +534,14 @@ class TexasHold_em(Cards):
 
         # pk
         result = []
+        
         for n in range(1, len(pk_cards_list)):
             result.append(self.judge(pk_cards_list[0], pk_cards_list[n]))
+        #print result,all(result)
+        #if all(result): print 'allresult'
         return all(result)
 
-    def cal_rate(self, player_num, public_cards, my_pocket_cards, run_times=1000):
+    def cal_rate(self, player_num, public_cards, my_pocket_cards, run_times=10000):
         '''计算跑 n 次赢的次数'''
         my_win_cnt = 0
         for n in range(run_times):
@@ -542,14 +553,15 @@ class TexasHold_em(Cards):
 if __name__ == '__main__':
 
     z = TexasHold_em()
-    #my_win_cnt = 0
-    #for n in range(10000):
-    #    if z.test():
-    #        my_win_cnt += 1
-    #    z.shuffle()
-    #print my_win_cnt, 'my_win_cnt'
+
+    my_win_cnt = 0
+    for n in range(10000):
+        if z.test():
+            my_win_cnt += 1
+        z.shuffle()
+    print my_win_cnt, 'my_win_cnt'
     
     #['c_2', 'c_4', 'h_8', 'h_10', 'd_8']
-    print z.cal_rate(6, [], ['s_K','c_K'])
+    #print z.cal_rate(3, public_cards=['h_2', 's_3', 'h_4'], my_pocket_cards=['s_2','c_3'])
     #z.cal_rate(2, [], ['s_3','s_J'])
     #print z.cal_rate()

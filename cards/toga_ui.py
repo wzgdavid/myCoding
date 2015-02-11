@@ -32,6 +32,8 @@ def build(app):
         #print input_msg.value, 'input_msg.value'
     c_label = toga.Label(u'花色(s-spades黑桃 h-hearts红桃 d-diamonds方块 c-clubs梅花)', alignment=toga.LEFT_ALIGNED)
     container.add(c_label)
+    people_num_label = toga.Label(u'输入人数', alignment=toga.LEFT_ALIGNED)
+    container.add(people_num_label)
 
     button = toga.Button(u'计算', on_press=send_msg)
     
@@ -73,5 +75,5 @@ def build(app):
 
 
 if __name__ == '__main__':
-    app = toga.App(u'机器人吉米', 'personel.wzg', startup=build)
+    app = toga.App(u'德州', 'personel.wzg', startup=build)
     app.main_loop()
