@@ -1,3 +1,9 @@
+# encoding: utf-8
+'''
+ python与 redis 的 ORM 映射
+一个 model 的字段对应 redis 里的一个字符串, 字符串是 json 格式
+'''
+
 import redis
 import json
 
@@ -19,10 +25,7 @@ person = json.dumps(person)
 #pipe.execute()
 #print r.get('foo')
 
-
 #print r.exists('foo')
-
-
 
 
 class Redis(object):
@@ -61,14 +64,12 @@ class Model(object):
         #    return
         #self.r.set(self.__whole_pk(self.pk))
 
-
     def save(self):
         fields = self.__class__.fields
         data = {}
         for key in fields:
             data[key] = getattr(self, key)
 
-        
         #print data
         json_data = json.dumps(data)
 
@@ -116,8 +117,6 @@ class Person(Model):
         self.save()
 
 
-
-
 #m.save()
 #m.save()
 #p = Person.get_instance('6')
@@ -133,5 +132,5 @@ if __name__ == '__main__':
 
     p = Person.get(5)
     print p.name
+    print p.info['a']
     #p.change_name('cccccc')
-
