@@ -1,13 +1,8 @@
-# encoding:gb2312
-
-
-'''
-抽象工厂模式
-
+# encoding: utf-8
 
 '''
-
-
+date: 2015-5-11
+'''
 class Charactor(object):
     def __init__(self):
         pass
@@ -16,29 +11,36 @@ class Charactor(object):
 class Human(Charactor):
     def __init__(self):
         print('Human __init__')
+    def foo(self):
+        print 'human foo'
 
 
 class Orc(Charactor):
     def __init__(self):
         print('Orc __init__')
+    def foo(self):
+        print 'orc foo'
 
 
 class CharactorFactory(object):
-    def createCharactor(self):
-        pass
+
+    @classmethod
+    def create(cls, cls_name):
+        '''
+        閫氳繃瀛楃涓插弬鏁扮敓鎴愮被瀹炰緥
+        '''
+        if cls_name.lower() in [n.lower() for n in globals()]:
+            #print cls_name.capitalize()
+            return globals()[cls_name.capitalize()]()
+        else:
+            print 'there is no class in the module'
 
 
-class HumanFactory(CharactorFactory):
-    def createCharactor(self):
-        return Human()
+h2 = Human()
 
+human = CharactorFactory.create('human')
+print type(human) is type(h2)
+orc = CharactorFactory.create('orc')
 
-class OrcFactory(CharactorFactory):
-    def createCharactor(self):
-        return Orc()
-
-
-hf = HumanFactory()
-h = hf.createCharactor()
-of = OrcFactory()
-o = of.createCharactor()
+human.foo()
+orc.foo()
