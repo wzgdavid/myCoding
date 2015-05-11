@@ -2,6 +2,8 @@
 '''
  python与 redis 的 ORM 映射
 一个 model 的字段对应 redis 里的一个字符串, 字符串是 json 格式
+
+redis 版本 : redis-2.8.13
 '''
 
 import redis
@@ -11,13 +13,13 @@ pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
 r = redis.Redis(connection_pool=pool)
 
 
-person = {
-    'pk': 2,
-    'name': 'aaa',
-    'age': 66,
-}
-
-person = json.dumps(person)
+#person = {
+#    'pk': 2,
+#    'name': 'aaa',
+#    'age': 66,
+#}
+#
+#person = json.dumps(person)
 #r.set('person1', person)
 #pipe = r.pipeline()
 #pipe.set('foo', 'pipe')
@@ -88,7 +90,7 @@ class Person(Model):
     fields = ['pk', 'name', 'age', 'info']
 
     def __init__(self):
-        super(Person, self).__init__()  
+        super(Person, self).__init__()
 
     @classmethod
     def get(cls, pk):
@@ -96,7 +98,7 @@ class Person(Model):
         #print obj ,'has obj or not'
         if not obj:
             #print 'create obj'
-            cls.create(pk)
+            obj = cls.create(pk)
         return obj
 
     @classmethod
@@ -111,16 +113,12 @@ class Person(Model):
             'c': 'cccc',
         }
         p.save()
+        return p
 
     def change_name(self, name):
         self.name = name
         self.save()
 
-
-#m.save()
-#m.save()
-#p = Person.get_instance('6')
-#print p
 
 if __name__ == '__main__':
     # test redis
@@ -130,7 +128,9 @@ if __name__ == '__main__':
     #m = Model.get(1)
     #print m.test()
 
-    p = Person.get(5)
+    p = Person.get(5591)
     print p.name
-    print p.info['a']
+    #p.change_name('changed name2')
+    #print p.name
+    #print p.info['a']
     #p.change_name('cccccc')
