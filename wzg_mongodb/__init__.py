@@ -58,6 +58,9 @@ class MongoModel(object):
 
     @classmethod
     def get(cls, pk):
+        '''
+        根据 pk 取得字段,然后生成对应的类返回
+        '''
         fields = mongo_app.get(cls._pk(pk))
         if not fields:
             return None
@@ -75,8 +78,9 @@ class MongoModel(object):
         fields = self.__class__.fields
         record = mongo_app.get(self.pk)
         #print 'record:', record
-        # 无记录 insert
+        
         data = {}
+        # 无记录 insert
         if not record:
             #print 'save fields:', fields
             
@@ -84,20 +88,20 @@ class MongoModel(object):
                 if field == 'pk':
                     data['pk'] = self.__class__.__name__.lower() + str(getattr(self, field))
                 else:
-                    data[field] = getattr(self, field) 
+                    data[field] = getattr(self, field)
             print 'no record so save fields:', data
             mongo_app.set(data)
+        # 有记录 update
         else:
+            for field in fields:
+                if field == 'pk':
+                    pass
+                else:
+                    data[field] = getattr(self, field)
             print 'have record so update fields:', data
-            mongo_app.update(data['pk'], data)
-        
-        #mongo_app.set
+            mongo_app.update(self.pk, data)
+            
 
-    #def _cursor_len(self, cursor):
-    #    cnt = 0
-    #    for n in cursor:
-    #        cnt += 1
-    #    return cnt
 
     @classmethod
     def _pk(cls, pk):
@@ -119,13 +123,16 @@ class Person(MongoModel):
 
     @classmethod
     def _create(cls, pk):
+        '''
+        db 中没有对应记录,则创建一个
+        '''
         person = cls()
         person.pk = pk
         person.name = 'init name'
         person.age = 0
         person.other_info = {
-            'address': 'address',
-            'country': 'china',
+            'address': 'init address',
+            'country': 'init country',
         }
         person.save()
         return person
