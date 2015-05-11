@@ -1,10 +1,10 @@
-# encoding:gb2312
+# encoding: utf-8
 
 '''
-ÖĞ½éÕßÄ£Ê½Ä£Ê½
+ä¸­ä»‹è€…æ¨¡å¼æ¨¡å¼
 '''
 '''
-buyer µ½Á½¸ösellerÄÇÂòÉÌÆ·
+buyer åˆ°ä¸¤ä¸ªselleré‚£ä¹°å•†å“
 '''
 
 
@@ -82,7 +82,7 @@ class Mediator(object):
 
 
 '''
-Ä£ÄâÁ½´Î½»Ò×
+æ¨¡æ‹Ÿä¸¤æ¬¡äº¤æ˜“
 '''
 goods = Goods()
 goods2 = Goods()

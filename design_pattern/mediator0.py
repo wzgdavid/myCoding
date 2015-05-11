@@ -1,11 +1,11 @@
-# encoding:gb2312
+# encoding: utf-8
 
 '''
-�н���ģʽģʽ
+中介者模式模式
 '''
 
 '''
-buyer ������seller������Ʒ
+buyer 到两个seller那买商品
 '''
 
 
@@ -58,7 +58,7 @@ class Seller(Dealer):
 
 
 '''
-ģ�����ν���
+模拟两次交易
 '''
 goods = Goods()
 goods2 = Goods()

@@ -1,8 +1,8 @@
-# encoding:gb2312
+# encoding: utf-8
 
 '''
-命令模式
-增减命令只要增加或减少继承Command的类，不用修改其他类，实现低耦合
+鍛戒护妯″紡
+澧炲噺鍛戒护鍙澧炲姞鎴栧噺灏戠户鎵緾ommand鐨勭被锛屼笉鐢ㄤ慨鏀瑰叾浠栫被锛屽疄鐜颁綆鑰﹀悎
 '''
 
 
@@ -30,7 +30,7 @@ class Run(Command):
         print('doCmd run')
 
 
-# 只要增加一个Eat就能新增一个eat命令
+# 鍙澧炲姞涓�涓狤at灏辫兘鏂板涓�涓猠at鍛戒护
 class Eat(Command):
     def __init__(self):
         self.status = 'i am Eating'

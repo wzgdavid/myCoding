@@ -1,8 +1,7 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
 '''
-���ģʽ
-�������⣺��ģ�巽����࣬�ӽǲ�ͬ�������Ǵ��������������
-
+外观模式
+个人理解：和模板方法差不多，视角不同，这里是从这个过程来定义
 '''
 
 
@@ -61,7 +60,7 @@ class GoToSchool:
         self.goOut.goOut()
         self.arraveSchool.arriveSchool()
 '''
-��ѧǰһϵ�ж�����Ϊ��������Student�ķ���
+上学前一系列动作作为参数传给Student的方法
 '''
 
 

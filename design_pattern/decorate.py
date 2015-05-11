@@ -1,7 +1,4 @@
-# -*- coding:gb2312 -*-
-'''
-в╟йндёй╫
-'''
+# encoding: utf-8
 
 
 class Car:

@@ -1,4 +1,4 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
 
 
 class Vehicle:

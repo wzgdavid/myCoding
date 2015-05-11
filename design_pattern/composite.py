@@ -1,11 +1,4 @@
-# encoding:gb2312
-
-
-'''
-组合模式
-
-
-'''
+# encoding: utf-8
 
 
 class Component:

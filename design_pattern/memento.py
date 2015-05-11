@@ -1,7 +1,7 @@
-# encoding:gb2312
+# encoding: utf-8
 
 '''
-����¼ģʽ
+备忘录模式
 '''
 
 

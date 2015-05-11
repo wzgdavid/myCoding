@@ -1,10 +1,10 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
 '''
-�������⣺��һ���ض�˳��ִ��һ�鷽��
+个人理解：以一个特定顺序执行一组方法
 '''
 
 '''
-����һ��������ȥѧУ�Ĺ��̣�����һ���ӿ�
+定义一个早上起床去学校的过程，这是一个接口
 '''
 
 
@@ -67,7 +67,7 @@ class Student(GoToSchool):
     def arriveSchool(self):
         print('arriveSchool')
     '''
-    ÿ�����幤�������Խ�ϲ���ģʽ
+    每个具体工作还可以结合策略模式
     '''
 
 

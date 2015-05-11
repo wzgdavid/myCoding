@@ -1,9 +1,5 @@
-# encoding:gb2312
+# encoding: utf-8
 
-'''
-µ¥ÀýÄ£Ê½
-
-'''
 
 
 class Singleton(object):

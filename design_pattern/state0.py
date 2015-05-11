@@ -1,13 +1,13 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
+
 
 
 '''
-��Ϸ�еĽ�ɫ������״̬
-normal  ����
-death   ����
-poisoned  �ж�
-ֻ������״̬�ܱ�����ж�״̬�ܽⶾ
-
+游戏中的角色，几种状态
+normal  正常
+death   死亡
+poisoned  中毒
+只有死亡状态能被复活，中毒状态能解毒
 '''
 
 

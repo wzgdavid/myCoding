@@ -1,10 +1,9 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
 
 '''
-�������⣬��Ϊ�۲������۲�Ķ�����ĳ����Ϊ���ı�۲��ߵ�ĳЩ״̬
-�������Ŷӵȴ��кţ����е��������status��waiting��Ϊhandling
-���۲�����DisplayBoard���۲�����Person
-
+个人理解，因为观察者所观察的东西的某个行为而改变观察者的某些状态
+在银行排队等待叫号，被叫到号码的人status从waiting变为handling
+被观察者是DisplayBoard，观察者是Person
 '''
 
 

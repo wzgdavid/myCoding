@@ -1,8 +1,4 @@
-# -*- coding:gb2312 -*-
-'''
-通过另一个类来产生类的实例
-'''
-
+# encoding: utf-8
 
 class Vehicle:
     def __init__(self):

@@ -1,18 +1,17 @@
-# encoding:gb2312
+# encoding: utf-8
 
 '''
-Ö°ÔðÁ´Ä£Ê½
-¸öÈËÀí½â£¬¾ÍÊÇ°Ñif  else  ÖÐ²»Í¬µÄ´¦Àí½»¸ø²»Í¬µÄÀàÀ´´¦Àí£¬
-¶øÇÒÕâÐ©ÀàÓÖÄÜÏà»¥´«µÝÏûÏ¢£¬µ«Ö°ÔðÁ´Ò²²»¹âÊÇÅÅËûµÄ£¬Ò²±Èif else Áé»î
-ËµµÀ if else ÎÒÏëµ½ÁË¹¤³§
-µ«¹¤³§Ä£Ê½ÖÐÆ½ÐÐµÄÀàÖ®¼ä²»ÐèÒª´«µÝÏûÏ¢
+èŒè´£é“¾æ¨¡å¼
+ä¸ªäººç†è§£ï¼Œå°±æ˜¯æŠŠif  else  ä¸­ä¸åŒçš„å¤„ç†äº¤ç»™ä¸åŒçš„ç±»æ¥å¤„ç†ï¼Œ
+è€Œä¸”è¿™äº›ç±»åˆèƒ½ç›¸äº’ä¼ é€’æ¶ˆæ¯ï¼Œä½†èŒè´£é“¾ä¹Ÿä¸å…‰æ˜¯æŽ’ä»–çš„ï¼Œä¹Ÿæ¯”if else çµæ´»
+è¯´é“ if else æˆ‘æƒ³åˆ°äº†å·¥åŽ‚
+ä½†å·¥åŽ‚æ¨¡å¼ä¸­å¹³è¡Œçš„ç±»ä¹‹é—´ä¸éœ€è¦ä¼ é€’æ¶ˆæ¯
 '''
 
 '''
-±ÈÈçÎÒÊÇÒ»¸öµêÔ±£¬¶ÔÓÚ8ÔÂ·ÝÌØµØÉÌÆ·£¬ÎÒÓÐ²»Í¬µÄ¿´·¨£¬Ïòµê³¤±í´ïÁËÎÒµÄ¿´·¨£¬
-µê³¤ÔÚ¿ª»áÊ±Ïò¾­ÀíÌá³öÁËÕâ¸ö½¨Òé£¬¾­¹ý¼òµ¥ÉÌÌÖºó£¬¾ö¶¨ÕâÃ´×ö£¬²¢¸æÖªÁË¹¤³§³¤
-
-µ±È» ÕâÖ»ÊÇÒ»Ìõ¿ÉÄÜÂ·¾¶
+æ¯”å¦‚æˆ‘æ˜¯ä¸€ä¸ªåº—å‘˜ï¼Œå¯¹äºŽ8æœˆä»½ç‰¹åœ°å•†å“ï¼Œæˆ‘æœ‰ä¸åŒçš„çœ‹æ³•ï¼Œå‘åº—é•¿è¡¨è¾¾äº†æˆ‘çš„çœ‹æ³•ï¼Œ
+åº—é•¿åœ¨å¼€ä¼šæ—¶å‘ç»ç†æå‡ºäº†è¿™ä¸ªå»ºè®®ï¼Œç»è¿‡ç®€å•å•†è®¨åŽï¼Œå†³å®šè¿™ä¹ˆåšï¼Œå¹¶å‘ŠçŸ¥äº†å·¥åŽ‚é•¿
+å½“ç„¶ è¿™åªæ˜¯ä¸€æ¡å¯èƒ½è·¯å¾„
 '''
 
 
@@ -96,10 +95,10 @@ class FactoryManager(CORNode):
         self.request = request
 
     def do(self):
-        print('ÐÞ¸ÄÏÂÔÂÉú²ú¼Æ»®')
+        print('ä¿®æ”¹ä¸‹æœˆç”Ÿäº§è®¡åˆ’')
 
 
-r = Request('ÏÂÔÂÌØ¶¨ÉÌÆ·ÌáÒé')
+r = Request('ä¸‹æœˆç‰¹å®šå•†å“æè®®')
 c = Clerk()
 sm = ShopManager()
 m = Manager()

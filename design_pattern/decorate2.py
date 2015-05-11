@@ -1,9 +1,7 @@
-# -*- coding:gb2312 -*-
+# encoding: utf-8
 '''
-×°ÊÎÄ£Ê½
-
+è£…é¥°æ¨¡å¼
 '''
-
 
 class Car:
     def __init__(self, cid):
@@ -66,7 +64,7 @@ class TypeMacan(TypeDecorator):
 cars = []
 
 '''
-3¸öÑ­»·Ä£Äâ3¸öÁ÷Ë®Ïß
+3ä¸ªå¾ªç¯æ¨¡æ‹Ÿ3ä¸ªæµæ°´çº¿
 '''
 
 [cars.append(Car(n)) for n in range(100)]
@@ -75,4 +73,4 @@ cars = []
 
 [Type911(car).decorate() for car in cars]
 
-[print(car) for car in cars]
+print [car for car in cars]
