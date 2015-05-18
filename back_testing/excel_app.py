@@ -42,7 +42,7 @@ class Bar(object):
         return self.close < self.open
 
 
-app = ExcelApp('/Users/myc/Desktop/work\ note/myCoding/back_testing/aa.xlsx')
+app = ExcelApp('/Users/myc/Desktop/work_note/myCoding/back_testing/bars.xlsx')
 
 
 class Bars(object):
