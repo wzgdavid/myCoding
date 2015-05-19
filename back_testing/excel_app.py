@@ -131,5 +131,6 @@ if __name__ == '__main__':
     bars = Bars()
     print type(bars[15].open)
     print bars.ma(15,5)
+    trader = Trader(40000)
 
 
