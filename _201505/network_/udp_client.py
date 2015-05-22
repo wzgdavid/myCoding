@@ -1,22 +1,13 @@
-from socket import *
+# encoding: utf-8
+import socket
+from setting import HOST, PORT
 
-HOST = 'localhost'
-HOST = ''
-PORT = 21567
-BUFSIZE = 1024
 
-ADDR = (HOST, PORT)
-
-udpCliSock = socket(AF_INET, SOCK_DGRAM)
-
-while True:
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+while 1:
     data = raw_input('>')
-    if not data:
-        break
-    udpCliSock.sendto(data,ADDR)
-    data,ADDR = udpCliSock.recvfrom(BUFSIZE)
-    if not data:
-        break
-    print data
-
-udpCliSock.close()
+    sock.sendto(data, (HOST, PORT))
+    if not data: break;
+    newdata = sock.recvfrom(1024)
+    print newdata
+sock.close()

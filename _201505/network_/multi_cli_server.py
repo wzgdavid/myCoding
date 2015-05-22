@@ -33,17 +33,21 @@ def foo(conn, addr):
 
 
 HOST = ''                 # Symbolic name meaning all available interfaces
-PORT = 50017              # Arbitrary non-privileged port
+PORT = 50020              # Arbitrary non-privileged port
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
+
 s.listen(2)
+conn, addr = s.accept()
 
 
 while True:
     #conn = foo()
-    conn, addr = s.accept()
-    thread = threading.Thread(target=foo, args=(conn, addr))
-    thread.start()
-#conn.close()
+    data = conn.recv(1024)
+    if not data: break
+    conn.send(data)
+    #thread = threading.Thread(target=foo, args=(conn, addr))
+    #thread.start()
+conn.close()
 
 

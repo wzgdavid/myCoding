@@ -1,18 +1,12 @@
+# encoding: utf-8
+
 import socket
-from time import ctime
+from setting import HOST, PORT
 
-HOST = 'localhost'
-PORT = 49222
-BUFSIZE = 1024
-ADDR = (HOST,PORT)
-
-udpSerSock = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
-udpSerSock.bind(ADDR)
-
-while True:
-    print 'wating for message...'
-    data, addr = udpSerSock.recvfrom(BUFSIZE)
-    udpSerSock.sendto('[%s] %s'%(ctime(),data),addr)
-    print '...received from and retuned to:',addr
-
-udpSerSock.close()
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((HOST, PORT))
+while 1:
+    data, address = sock.recvfrom(1024)
+    if not data: break;
+    sock.sendto(data, address)
+sock.close()
