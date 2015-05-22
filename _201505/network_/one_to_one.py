@@ -15,10 +15,8 @@ for example
 '''
 
 import socket
+from setting import HOST, PORT
 
-
-HOST = ''
-PORT = 50020
 
 __answer = {
     '1': 'i know you have sent 1 to me',
