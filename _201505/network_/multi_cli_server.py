@@ -20,34 +20,26 @@ asd ---- data from server
 import socket
 import threading
 
-def foo(conn, addr):
-
-    
+def echo(conn, addr):
     print 'Connected by', addr
-    data = conn.recv(1024)
-    if not data: return
-    conn.sendall(data + ' ---- data from server ')
+    while True:
+        data = conn.recv(1024)
+    
+        if data: 
+            conn.sendall(data + ' ---- data from server ')
+        else:
+            conn.sendall('no data were sent from client ')
 
-    #return conn
-    conn.close()
 
-
-HOST = ''                 # Symbolic name meaning all available interfaces
-PORT = 50020              # Arbitrary non-privileged port
+HOST = ''
+PORT = 50002
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
-
-s.listen(2)
-conn, addr = s.accept()
+s.listen(5)
 
 
 while True:
-    #conn = foo()
-    data = conn.recv(1024)
-    if not data: break
-    conn.send(data)
-    #thread = threading.Thread(target=foo, args=(conn, addr))
-    #thread.start()
+    conn, addr = s.accept()
+    thread = threading.Thread(target=echo, args=(conn, addr))
+    thread.start()
 conn.close()
-
-
