@@ -2,34 +2,67 @@
 '''
 client之间通信
 用udp
+
+
+客户端在终端coding
+
+for example
+
+客户端首先发送 ready, 表示加入通信
+>>> import socket, json
+>>> s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+>>> data ={'uid': 1, 'ready': 'yes'}
+>>> json_data = json.dumps(data)
+>>> s.sendto(json_data, ('localhost', 50002))
+26
+>>> 
+
+1端 发消息给 2端
+>>> data ={'uid': 1, 'dstid': 2,'msg': 'hello 2'}  # uid 自己  dstid 对方
+>>> json_data = json.dumps(data)
+>>> s.sendto(json_data, ('localhost', 50002))
+40
+>>> 
+
+此时在2端 接收
+>>> s.recv(123)
+'{"msg": "hello 2", "uid": 1, "dstid": 2}'
+>>> 
+反之亦然
+
+
+
 '''
+
 import json
 import socket
 from setting import HOST, PORT
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((HOST, PORT))
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind((HOST, PORT))
 
 client_address = {}  # 格式  {id: address}
-while 1:
-    data_str, address = sock.recvfrom(1024)
-    if not data_str: continue;
-    #print 'client address ',address
-    #print 'data', data_str
-    if data_str == 'start_':
-        continue
 
-    data = json.loads(data_str)
-    if address not in client_address.keys():
-        client_address.update({data['uid']: address})
-        
-    print 'all clients connet ', client_address
-
-    # 有目标 id 发送消息给目标
-    if data['dstid'] in client_address.keys():
-        sock.sendto(data_str, client_address[data['dstid']])
-    # 没有目标 id 发消息回自己
-    else:
-        sock.sendto(json.dumps({'msg': 'no this dstid'}), address)
+if __name__ == '__main__':
+    while True:
+        data_str, address = s.recvfrom(1024)
+        if not data_str: continue;
     
-sock.close()
+        # 首次加入,发 uid 和 ready 消息 给服务器 data ={'uid': 1, 'ready': 'yes'}
+        data = json.loads(data_str)
+        print data
+        if data.get('ready', '') == 'yes':
+            client_address.update({data['uid']: address})
+            print 'client_address ', client_address
+            continue
+        
+    
+        # 有目标 id 发送消息给目标
+        if data['dstid'] in client_address.keys():
+            s.sendto(data_str, client_address[data['dstid']])
+
+        else:
+            print 'no this dstid'
+            #s.sendto(json.dumps({'msg': 'no this dstid'}), address)
+        
+    s.close()
