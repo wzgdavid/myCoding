@@ -1,0 +1,24 @@
+<p>hello.html</p>
+{% if name %}
+  <h1>Hello {{ name }}!</h1>
+{% else %}
+  <h1>Hello World!</h1>
+{% endif %}
+
+
+{% if data %}
+  <h1>name is {{ data.name }}!</h1>
+  <h1>age is {{ data.age }}!</h1>
+{% endif %}
+
+
+{% if person %}
+  <h1>name is {{ person.name }}!</h1>
+  <h1>age is {{ person.age }}!</h1>
+{% endif %}
+
+<ul>
+{% for p in persons %}
+    <li>name is {{ p.name }}, age is {{ p.age }}</li>
+{% endfor %}
+</ul>
