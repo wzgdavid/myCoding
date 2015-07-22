@@ -111,7 +111,14 @@ class MongoModel(object):
 
 class Person(MongoModel):
     fields = ['pk', 'name', 'age', 'other_info']
-
+    '''
+    现在考虑字段以字典形式保存比如
+    '''
+    field_think = {
+        'pk': 'unique',
+        'name': 'str',
+        'course': 'list fk',
+    }
     @classmethod
     def get(cls, pk):
         obj = super(Person, cls).get(pk)
