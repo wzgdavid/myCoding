@@ -4,7 +4,6 @@ import pymongo
 '''
 mongodb中一个 document 对应 python 的一个 Model 的实例的字段
 一个 collection 对应一个 Model 的类
-
 '''
 
 class MongoApp(object):
@@ -14,17 +13,17 @@ class MongoApp(object):
         self.collection = client[db][collection]
     
     def get(self, pk):
-        result = self.collection.find({'pk': pk})
-        #print re
-        for document in result:
-            return document
+        result = self.collection.find_one({'pk': pk})
+        return result
         
     def set(self, value):
         self.collection.insert(value)
 
     def update(self, pk, value):
-        #db.Account.update({"UserName":"libing"},{"$set":{"Email":"libing@126.com","Password":"123"}})
         self.collection.update({'pk': pk}, {"$set": value})
+
+    def upsert(self, pk, value):
+        self.collection.update({'pk': pk}, {"$set": value}, True)
 
 
 class MongoModel(object):
@@ -40,9 +39,8 @@ class MongoModel(object):
         '''
         根据 pk 取得字段,然后生成对应的类返回
         '''
-
         mongo_app = cls.get_mongoapp()
-        fields = mongo_app.get(cls._pk(pk))
+        fields = mongo_app.get(pk)
         if not fields:
             return None
         if fields.get('_id'):
@@ -55,44 +53,18 @@ class MongoModel(object):
         return obj
 
     def save(self):
-        '''
-        2015-07-24
-        问题：首次新插入一个person记录时（原来没记录），
-        接连执行两个save比如执行grow_up()和change_name()有几个save就会存几条新记录，
-        设想改进save方法，用类似原子操作或者缓存 或者其他
-        '''
-        print('MongoModel save()')
+        data = {}
         fields = self.__class__.fields
         mongo_app = self.__class__.get_mongoapp()
-        record = mongo_app.get(self.pk)
-        #print 'record:', record
-        
-        data = {}
-        # 无记录 insert
-        if not record:
-            #print 'save fields:', fields
-            
-            for field in fields:
-                if field == 'pk':
-                    data['pk'] = self.__class__.__name__.lower() + str(getattr(self, field))
-                else:
-                    data[field] = getattr(self, field)
-            print('no record so save fields:', data)
-            mongo_app.set(data)
-        # 有记录 update
-        else:
-            for field in fields:
-                if field == 'pk':
-                    pass
-                else:
-                    data[field] = getattr(self, field)
-            print('have record so update fields:', data)
-            mongo_app.update(self.pk, data)
-            
+
+        for field in fields:
+            data[field] = getattr(self, field)
+        mongo_app.upsert(self.pk, data)
 
     @classmethod
     def _pk(cls, pk):
-        return cls.__name__.lower() + str(pk)
+        #return cls.__name__.lower() + str(pk)
+        return str(pk)
 
 
 class EasyModel(MongoModel):
@@ -106,51 +78,38 @@ class EasyModel(MongoModel):
         return obj
 
 
-class Person(EasyModel):
-    '''具体的应用示例'''
-
-    db='test'
-    collection='person'
-    fields = ['pk', 'name', 'age', 'other_info']
-
-    @classmethod
-    def _init_instance(cls, pk):
-        person = cls()
-        person.pk = pk
-        person.name = ''
-        person.age = 0
-        person.other_info = {
-            'address': '',
-            'country': '',
-        }
-        person.save()
-        return person
-
-    def grow_up(self):
-        self.age += 1
-        self.save()
-
-    def change_name(self, name):
-        self.name = name
-        self.save()
-
 if __name__ == '__main__':
-    pass
+    class Person(EasyModel):
+        '''具体的应用示例'''
+    
+        db='test'
+        collection='person'
+        fields = ['pk', 'name', 'age', 'other_info']
+    
+        @classmethod
+        def _init_instance(cls, pk):
+            person = cls()
+            person.pk = pk
+            person.name = ''
+            person.age = 0
+            person.other_info = {
+                'phone_number': '',
+                'address': '',
+            }
+            person.save()
+            return person
+    
+        def grow_up(self):
+            self.age += 1
+            self.save()
+    
+        def change_name(self, name):
+            self.name = name
+            self.save()
+
+
     m = Person.get(2)
     print(m.name, m.age)
-
-    '''
-    2015-07-24
-    问题：首次新插入一个person记录时（原来没记录），
-    接连执行两个save比如执行grow_up()和change_name()有几个save就会存几条新记录，
-    设想改进save方法，用类似原子操作或者缓存 或者其他
-    '''
     m.grow_up()
-    m.change_name('aad')
-    #print(m.age)
-    #m.grow_up()
-    #m.save()
-    #print mongo_app
-    #print mongo_app.get(125556)
-    #mongo_app.set(person)
-    #print mongo_app.get(222)
+    m.change_name('yy')
+
