@@ -7,28 +7,8 @@ mongodb中一个 document 对应 python 的一个 Model 的实例的字段
 
 '''
 
-#client = pymongo.MongoClient('localhost', 27017)
-#
-##print client
-#
-#db = client.test # or db = client['test-database']
-#
-#collection = db.test # or collection = db['test-collection']
-#
-##print collection
-#
-#person = {
-#    'pk': 'mongomodel111',
-#    'name': 'xsss',
-#    'age': 300,
-#}
-##
-#collection.insert(person)
-#result = collection.find({'pk': 'person555'})
-
-
-
 class MongoApp(object):
+    '''这个类操作pymongo'''
     def __init__(self, url, port, db, collection):
         client = pymongo.MongoClient(url, port)
         self.collection = client[db][collection]
@@ -46,13 +26,13 @@ class MongoApp(object):
         #db.Account.update({"UserName":"libing"},{"$set":{"Email":"libing@126.com","Password":"123"}})
         self.collection.update({'pk': pk}, {"$set": value})
 
-mongo_app = MongoApp(HOST, PORT, 'test', 'test')
-
 
 class MongoModel(object):
-
+    '''
+    这个类操作MongoApp
+    '''
     @classmethod
-    def get_mongo(cls):
+    def get_mongoapp(cls):
         return MongoApp(HOST, PORT, cls.db, cls.collection)
 
     @classmethod
@@ -60,9 +40,8 @@ class MongoModel(object):
         '''
         根据 pk 取得字段,然后生成对应的类返回
         '''
-        print(cls.__name__, 'asdfs')
-        #mongo_app = MongoApp(HOST, PORT, cls.db, cls.collection)
-        mongo_app = cls.get_mongo()
+
+        mongo_app = cls.get_mongoapp()
         fields = mongo_app.get(cls._pk(pk))
         if not fields:
             return None
@@ -84,7 +63,7 @@ class MongoModel(object):
         '''
         print('MongoModel save()')
         fields = self.__class__.fields
-        mongo_app = self.__class__.get_mongo()
+        mongo_app = self.__class__.get_mongoapp()
         record = mongo_app.get(self.pk)
         #print 'record:', record
         
@@ -116,33 +95,26 @@ class MongoModel(object):
         return cls.__name__.lower() + str(pk)
 
 
-class Person(MongoModel):
+class EasyModel(MongoModel):
+    '''这一层脱离mongo的操作'''
+    @classmethod
+    def get(cls, pk):
+        obj = super(EasyModel, cls).get(pk)
+        if not obj:
+            obj = cls._init_instance(pk)
+        # print(cls.__name__,'class name')
+        return obj
+
+
+class Person(EasyModel):
+    '''具体的应用示例'''
+
     db='test'
     collection='person'
     fields = ['pk', 'name', 'age', 'other_info']
-    #'''
-    #现在考虑字段以字典形式保存比如
-    #'''
-    #field_think = {
-    #    'pid': 'pk',
-    #    'age': 'int',
-    #    'name': 'str',
-    #    'course': 'list fk',
-    #}
-    @classmethod
-    def get(cls, pk):
-        obj = super(Person, cls).get(pk)
-        #print('has obj? in person',obj)
-        if not obj:
-            obj = cls._create(pk)
-            
-        return obj
 
     @classmethod
-    def _create(cls, pk):
-        '''
-        db 中没有对应记录,则创建一个
-        '''
+    def _init_instance(cls, pk):
         person = cls()
         person.pk = pk
         person.name = ''
@@ -164,7 +136,7 @@ class Person(MongoModel):
 
 if __name__ == '__main__':
     pass
-    m = Person.get(175)
+    m = Person.get(2)
     print(m.name, m.age)
 
     '''
@@ -174,7 +146,7 @@ if __name__ == '__main__':
     设想改进save方法，用类似原子操作或者缓存 或者其他
     '''
     m.grow_up()
-    m.change_name('jjj')
+    m.change_name('aad')
     #print(m.age)
     #m.grow_up()
     #m.save()
