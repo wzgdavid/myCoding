@@ -74,5 +74,25 @@ def test3():
     return render_template('hello.html', persons=persons)
 
 
+@app.route('/testaction', methods=['POST'])
+def testaction():
+    data = {}
+    data['rjson'] = request.get_json()
+    data['name'] = request.form['user']
+    print(data)
+    return json.dumps(data)
+    #return render_template('temp/visitor_summary.html', data=data)
+
+@app.route('/form', methods=['GET'])
+def form():
+    return render_template('form.html')
+
+@app.route('/post_params', methods=['POST'])
+def post_params():
+    data = request.get_json()
+    print(data)
+    return json.dumps(data)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
