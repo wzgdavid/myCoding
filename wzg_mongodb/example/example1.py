@@ -1,6 +1,10 @@
-from ..__init__ import EasyModel
+import sys
+sys.path.insert(0, 'C:\\Users\\Administrator\\Desktop\\myCoding')
+
+from wzg_mongodb import EasyModel
 
 if __name__ == '__main__':
+
     class Person(EasyModel):
         db='test'
         collection='person'
@@ -26,7 +30,6 @@ if __name__ == '__main__':
         def change_name(self, name):
             self.name = name
             self.save()
-
 
     m = Person.get(2)
     print(m.name, m.age)
