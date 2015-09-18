@@ -5,6 +5,7 @@ from pprint import pprint
 from collections import Counter
 from bs4 import BeautifulSoup
 import gevent
+from gevent import monkey; monkey.patch_all()
 
 '''
 sample urls
