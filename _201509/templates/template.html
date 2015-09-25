@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        {%for url, title in data.items()%}
+    	<li ><a href="{{ url }}">{{ url }} &nbsp &nbsp &nbsp {{ title }}</a></li>
+    	{%endfor%}
+    </div>
+</body>
+</html
