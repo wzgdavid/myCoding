@@ -20,23 +20,32 @@ output = do_something(input)
 with open(filename, 'w') as f:
    f.write(output)
 '''
-def fetch_data():
+def fetch_data(qtype, qname):
+    '''
+	                           qtype 
+	# http://futures.hexun.com/industrynews/index.html') # 金属
+    # http://futures.hexun.com/agriculturenews/index.html') # 农副资讯 
+    # http://futures.hexun.com/nyzx/index.html  # 能源资讯
+	'''
     global all_href
-    f = urllib.urlopen('http://futures.hexun.com/industrynews/index.html')
+    #f = urllib.urlopen('http://futures.hexun.com/industrynews/index.html') # 金属
+    #f = urllib.urlopen('http://futures.hexun.com/agriculturenews/index.html') # 农副资讯 
+    # http://futures.hexun.com/nyzx/index.html  # 能源资讯
+    f = urllib.urlopen('http://futures.hexun.com/%s/index.html' % qtype) #
     soup = BeautifulSoup(f.read(), 'html.parser')
-    keywd = u'螺纹'.decode('utf-8')
+    keywd = qname.decode('utf-8')
     temp01 = soup.find('div', class_='temp01')
     content = temp01.select('li > a')
-    hrefs = hrefs = [a['href'] + a.string for a in content if keywd in a.string]
+    hrefs = [a['href'] +' '+ a.string for a in content if keywd in a.string]
     all_href.extend(hrefs)
-    if hrefs:
-    	print 'index'
-        pprint(hrefs)
+    #if hrefs:
+    #	print 'index'
+    #    pprint(hrefs)
     max_idx = get_max_index(soup)
-    do_range = range(1, max_idx)[::-1]
+    do_range = range(1685, max_idx)[::-1]
     for idx in do_range:
         print idx
-        f = urllib.urlopen('http://futures.hexun.com/industrynews/index-%s.html' % idx)
+        f = urllib.urlopen('http://futures.hexun.com/%s/index-%s.html' % (qtype, idx))
         soup = BeautifulSoup(f.read(), 'html.parser')
         temp01 = soup.find('div', class_='temp01')
         content = temp01.select('li > a')
@@ -55,10 +64,19 @@ def fetch_data():
         all_href.extend(hrefs)
     #pprint(all_href)
     all_hrefstr = '\n'.join(all_href)
-    with open('file.txt', 'w') as ff:
-        ff.write(str(all_hrefstr))
-foo()
 
+    
+    #with open('file.txt', 'w') as ff:
+    #    ff.write(str(all_hrefstr))
+    return all_hrefstr
+
+
+def write_txt(data):
+    with open('file.txt', 'w') as ff:
+        ff.write(str(data))
+
+data = fetch_data('agriculturenews', u'豆粕')
+write_txt(data)
 #class Hexun():
 #	def __init__(self):
 #		self.f = 
