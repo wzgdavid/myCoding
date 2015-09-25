@@ -28,7 +28,7 @@ def get_date_of_reply(tieba_name, start_page=1, end_page=1):
 
         soup = BeautifulSoup(f.read(), 'html.parser')
         #<span class="threadlist_reply_date j_reply_data" title="最后回复时间">            9-15</span>
-        onepage_reply_spans = soup.find_all("span", class_="threadlist_reply_date j_reply_data")
+        onepage_reply_spans = soup.find_all("span", class_="j_reply_data")
         #onepage_date_of_reply = [getattr(one_span, 'string').strip() for one_span in onepage_reply_spans]
         onepage_date_of_reply = []
         for one_span in onepage_reply_spans:
@@ -81,4 +81,4 @@ def count_date(tieba_name, startpage, endpage, num=10):
 
 if __name__ == '__main__':
     #print test()
-    print count_date('期货', 1, 50, 3)
+    print count_date('python', 200, 250, 3)
