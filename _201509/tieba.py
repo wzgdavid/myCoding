@@ -1,5 +1,7 @@
 # encoding:utf-8
-
+'''
+贴吧某天的最后回复贴数
+'''
 import urllib, urllib2
 from pprint import pprint
 from collections import Counter

@@ -1,4 +1,7 @@
 # encoding:utf-8
+'''
+集中 和讯期货 一个品种的咨询
+'''
 import sys
 reload(sys)
 sys.setdefaultencoding("utf8")
@@ -112,7 +115,6 @@ def multi_write_html():
 
 
 if __name__ == '__main__':
-    d = {'name': 'wzg', 'age': 32}
     #HexunQihuo().fetch_data('agriculturenews', u'玉米').write_html()
     #write_html('nyzx', 'TA')
     #print type(myredis.getdict('玉米'))
