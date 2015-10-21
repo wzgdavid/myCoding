@@ -393,27 +393,29 @@ class TexasHold_em(Cards):
 #Turn round 转牌圈 - 第四张公共牌出现以后的押注圈
 #
 #River round 河牌圈 - 第五张公共牌出现以后 , 也即是摊牌以前的押注圈
+        
+        condition = 'only_mycard'
 
         '''
         my_cards手里指定牌，看与n个人玩的胜率
         (没有公共牌时)
         '''
-        if 0:
+        if condition == 'only_mycard':
             my_cards = []
             op_cards = []
-            #op_cards2 = []
-            #op_cards3 = []
-            #op_cards4 = []
+            # suit: 花色(s-spades黑桃 h-hearts红桃 d-diamonds方块 c-clubs梅花)
+            op_cards2 = []
+            op_cards3 = []
+            op_cards4 = []
             # 我的指定手牌
-            my_cards.append(self.get_card('s_K'))
-            my_cards.append(self.get_card('c_K'))
-    
+            my_cards.append(self.get_card('s_6'))
+            my_cards.append(self.get_card('c_5'))
             # 我也随机
             #my_cards.extend(self.get_random_cards(2))
     
-            #op_cards.extend(self.get_random_cards(2))
-            op_cards.append(self.get_card('h_A'))
-            op_cards.append(self.get_card('d_2'))
+            op_cards.extend(self.get_random_cards(2))
+            #op_cards.append(self.get_card('h_A'))
+            #op_cards.append(self.get_card('d_2'))
             #op_cards2.extend(self.get_random_cards(2))
             #op_cards3.extend(self.get_random_cards(2))
             #op_cards4.extend(self.get_random_cards(2))
@@ -438,21 +440,22 @@ class TexasHold_em(Cards):
             #print my_pk_cards, op_pk_cards3, result3, '  **********pk cards'
             #return all([result1, result2, result3])
             #result4 = self.judge(my_pk_cards, op_pk_cards4)
+            #return all([result1, result2, result3, result4])
 
         '''
         有三张公共牌时
 
         '''
 
-        if 1:
+        if condition == 'flop_round':
             my_cards = []
             op_cards = []
             op_cards2 = []
             #op_cards3 = []
             #op_cards4 = []
             # 我的指定手牌
-            my_cards.append(self.get_card('s_J'))
-            my_cards.append(self.get_card('d_8'))
+            my_cards.append(self.get_card('s_5'))
+            my_cards.append(self.get_card('d_6'))
 
             #公共牌
             flop = []
@@ -555,7 +558,7 @@ if __name__ == '__main__':
     z = TexasHold_em()
 
     my_win_cnt = 0
-    for n in range(10000):
+    for n in range(100000):
         if z.test():
             my_win_cnt += 1
         z.shuffle()
