@@ -7,7 +7,6 @@ sys.setdefaultencoding( "utf-8" )
 import pprint as pp
 
 
-
 def get_soup(url):
     r = requests.get(url)
     soup = None
@@ -24,17 +23,12 @@ def get_data(soup):
     data['title'] = soup.find('div', attrs={'class': 'mingzi'}).text.strip()
 
     xinxi = soup.find('div', attrs={'class': 'xinxi'}).find_all('li')
-    data['type'] = xinxi[0].find_all('div')[1].text.strip()
-    data['price'] = xinxi[1].find_all('div')[1].text.strip()
-    data['rooms'] = xinxi[2].find_all('div')[1].text.strip()
-    data['size'] = xinxi[3].find_all('div')[1].text.strip()
-    data['area'] = xinxi[4].find_all('div')[1].text.strip()
-    data['metro'] = xinxi[5].find_all('div')[1].text.strip()
-    data['compound'] = xinxi[6].find_all('div')[1].text.strip()
-    data['floor'] = xinxi[7].find_all('div')[1].text.strip()
-    data['furnished'] = xinxi[8].find_all('div')[1].text.strip()
-    data['internet'] = xinxi[9].find_all('div')[1].text.strip()
-    data['pets'] = xinxi[10].find_all('div')[1].text.strip()
+    for n in xinxi:
+        item_name = n.find('div', attrs={'class': 'shuxin'}).text.strip().strip(':').lower()
+        #print item_name
+        value = n.find('div', attrs={'class': 'wenzi'}).text.strip()
+        #print value
+        data[item_name] = value
 
     data['description'] = soup.find('div', attrs={'class': 'link'}).find_all('div')[1].text.strip()
     
