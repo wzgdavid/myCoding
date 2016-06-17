@@ -21,6 +21,31 @@ conn = MySQLdb.connect(
     )
 
 
+def get_item_urls(page_url, start=1, end=1):
+    '''
+    page_url    like http://www.smartshanghai.com/housing/shared-apartments/
+    current_url like http://www.smartshanghai.com/housing/shared-apartments/?page=2
+    item_url    like http://www.smartshanghai.com/housing/shared-apartments/691102
+    '''
+    pages = range(start, end+1)
+    current_urls = []
+    item_urls = set()
+    for n in pages:
+         current_urls.append(page_url+'?page='+str(n))
+    #print current_urls
+    for current_url in current_urls:
+        
+        soup = get_soup(current_url)
+        #print soup
+        if not soup:
+            break
+        print current_url
+        biaotis = soup.find('div', class_='content-inside').find_all('div', class_='biaoti')
+        for biaoti in biaotis:
+            item_urls.add(biaoti.a.attrs['href'])
+    #print item_urls
+    return item_urls
+
 def get_soup(url):
     r = requests.get(url)
     soup = None
@@ -84,7 +109,7 @@ CREATE TABLE `mysite`.`housing` (
   `compound` VARCHAR(45) NULL,
   `floor` VARCHAR(3) NULL,
   `furnished` VARCHAR(45) NULL,
-  `internet` VARCHAR(45) NULL,
+  `internet` VARCHAR(90) NULL,
   `metro` VARCHAR(200) NULL,
   `rooms` VARCHAR(200) NULL,
   `size` VARCHAR(45) NULL,
@@ -163,17 +188,28 @@ def save_to_db(data):
     cur.execute(sql) 
     cur.close()
     conn.commit()
-    conn.close()
+    #conn.close()
+
+
 
 def insert_one_to_db(url):
     data = get_data(url)
     if len(data['title'])> 0:
         save_to_db(data)   
 
-def save_to_json(url):
-    data = get_data(url)
+def crawl_page(url, start=1, end=1):
+    items = get_item_urls(url, start, end)
+    for url in items:
+        print url
+        try:
+          insert_one_to_db(url)
+        except Exception, e:
+          pass
+        
+    conn.close()
 
 
 if __name__ == '__main__':
     
-    insert_one_to_db('http://www.smartshanghai.com/housing/service-apartments/692117')
+    #insert_one_to_db('http://www.smartshanghai.com/housing/service-apartments/692117')
+    crawl_page('http://www.smartshanghai.com/housing/apartments-rent/',end=10)
