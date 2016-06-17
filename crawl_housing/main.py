@@ -7,6 +7,8 @@ sys.setdefaultencoding( "utf-8" )
 import pprint as pp
 import urllib 
 import MySQLdb
+import json
+
 
 _HOUSING_IMG_PATH = '/home/david/crawlhousing/images/housing/'
 
@@ -17,6 +19,7 @@ conn = MySQLdb.connect(
         passwd='1',
         db ='mysite',
     )
+
 
 def get_soup(url):
     r = requests.get(url)
@@ -111,6 +114,10 @@ def save_to_db(data):
     cur = conn.cursor()
     
 
+    try:
+        data['commission']
+    except KeyError, e:
+        data['commission'] = ''
 
     sql = '''
         insert into housing values({id}, "{title}", "{description}", "{type}", "{area}",
@@ -152,26 +159,21 @@ def save_to_db(data):
             water_filter=data['water_filter'],
             img_src=data['img_src'],
             )
-    print sql
+    #print sql
     cur.execute(sql) 
     cur.close()
     conn.commit()
     conn.close()
 
+def insert_one_to_db(url):
+    data = get_data(url)
+    if len(data['title'])> 0:
+        save_to_db(data)   
+
+def save_to_json(url):
+    data = get_data(url)
+
 
 if __name__ == '__main__':
-    #soup = get_soup('http://www.smartshanghai.com/housing/service-apartments/692114')
-    data = get_data('http://www.smartshanghai.com/housing/service-apartments/692114')
-    save_to_db(data)
-    #print(soup.prettify())
-    #print soup.title.string
-    #title = soup.find('div', class_='mingzi')
-    #print rmeta.attrs['content']
-    #print soup.find('div', class_='mingzi').string
-    #link = soup.find('div', class_='link')
-    #print soup.find('div', class_='link').find_all('div')[1].text.strip()
-    #fn = soup.find('div', class_='fast-navigation').find_all('li')
     
-    #for n in fn:
-    #    print n.attrs['class'][0]
-    #    print n.string.strip().lower()
+    insert_one_to_db('http://www.smartshanghai.com/housing/service-apartments/692117')
