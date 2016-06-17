@@ -8,6 +8,9 @@ import pprint as pp
 import urllib 
 import MySQLdb
 import json
+import gevent
+from gevent import monkey; monkey.patch_all()
+
 
 
 _HOUSING_IMG_PATH = '/home/david/crawlhousing/images/housing/'
@@ -39,7 +42,7 @@ def get_item_urls(page_url, start=1, end=1):
         #print soup
         if not soup:
             break
-        print current_url
+        print current_url+'-----------'
         biaotis = soup.find('div', class_='content-inside').find_all('div', class_='biaoti')
         for biaoti in biaotis:
             item_urls.add(biaoti.a.attrs['href'])
@@ -49,6 +52,7 @@ def get_item_urls(page_url, start=1, end=1):
 def get_soup(url):
     r = requests.get(url)
     soup = None
+    #print r.status_code
     if r.status_code == 200:
         soup = BeautifulSoup(r.text, 'lxml')
     return soup
@@ -107,13 +111,13 @@ CREATE TABLE `mysite`.`housing` (
   `area` VARCHAR(45) NULL,
   `commission` VARCHAR(150) NULL,
   `compound` VARCHAR(45) NULL,
-  `floor` VARCHAR(3) NULL,
+  `floor` VARCHAR(10) NULL,
   `furnished` VARCHAR(45) NULL,
   `internet` VARCHAR(90) NULL,
   `metro` VARCHAR(200) NULL,
   `rooms` VARCHAR(200) NULL,
   `size` VARCHAR(45) NULL,
-  `price` VARCHAR(45) NULL,
+  `price` VARCHAR(200) NULL,
   `pets` VARCHAR(45) NULL,
   `air_filter` TINYINT NULL DEFAULT 0,
   `balcony` TINYINT NULL DEFAULT 0,
@@ -206,10 +210,30 @@ def crawl_page(url, start=1, end=1):
         except Exception, e:
           pass
         
-    conn.close()
-
+    
 
 if __name__ == '__main__':
     
     #insert_one_to_db('http://www.smartshanghai.com/housing/service-apartments/692117')
-    crawl_page('http://www.smartshanghai.com/housing/apartments-rent/',end=10)
+    # crawl_page('http://www.smartshanghai.com/housing/commercial-spaces/',end=20)
+
+    # shared-apartments/?page=77
+    # apartments-rent/?page=534
+    # offices/?page=36
+
+    gevent.joinall([
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/shared-apartments/', end=78),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/apartments-rent/', start=1, end=100),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/apartments-rent/', start=101, end=200),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/apartments-rent/', start=201, end=300),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/apartments-rent/', start=301, end=400),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/apartments-rent/', start=401, end=500),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/service-apartments/', end=6),
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/commercial-spaces/,', end=4),
+      
+      gevent.spawn(crawl_page, 'http://www.smartshanghai.com/housing/offices/', end=36),
+        
+    ])
+
+
+    conn.close()
