@@ -114,12 +114,12 @@ def save_to_db(data):
 
     sql = '''
         insert into housing values({id}, "{title}", "{description}", "{type}", "{area}",
-        "{commission}", "{compound}", "{floor}", {furnished}, {internet},  
-        {price}, {metro}, {rooms}, {size}, {pets}, {air_filter}, 
+        "{commission}", "{compound}", "{floor}", "{furnished}", "{internet}",  
+        "{price}", "{metro}", "{rooms}", "{size}", "{pets}", {air_filter}, 
         {balcony}, {central_aircon}, {dryer}, {dvd_player}, {elevator}, 
         {health_club}, {outdoor_space}, {oven}, {parking}, {playground}, 
         {pool}, {security}, {tv}, {washing_machine}, {water_filter}, 
-        {img_src})
+        "{img_src}")
         '''.format(id=data['id'], title=data['title'],
             description=data['description'],
             type=data['type'],
