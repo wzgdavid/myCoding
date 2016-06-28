@@ -1,7 +1,10 @@
 import random
 
-P = 2000
-ATR = 50
+P = 3000
+ATR = 45
+A = ATR*2
+
+
 def sequence(length=99):
    
     rtn = []
@@ -9,7 +12,7 @@ def sequence(length=99):
     r = range(length)
     for m in r: 
         
-        p += random.randint(-1*ATR, ATR)
+        p += random.randint(-1*A, A)
         rtn.append(p)
 
     return rtn
@@ -44,7 +47,7 @@ def not_zhisun(runtime=9999, scope=0.95):
 #print not_zhisun(scope=0.96)
 
 
-def lowwest_between_1atr_2atr(runtime=9999, ATR=ATR):
+def lowwest_between_1atr_2atr(runtime=9999):
     cnt = 0
     for n in range(runtime):
         s = sequence()
@@ -54,4 +57,15 @@ def lowwest_between_1atr_2atr(runtime=9999, ATR=ATR):
     #print cnt
     return cnt / float(runtime)
 
+def min_higher(runtime=9999):
+    cnt = 0
+    for n in range(runtime):
+        s = sequence()
+        if min(s) > P - 7*ATR:
+            cnt += 1
+
+    #print cnt
+    return cnt / float(runtime)
+
 print lowwest_between_1atr_2atr()
+print min_higher()
