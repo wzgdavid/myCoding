@@ -1,0 +1,216 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>Your applied jobs</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+        <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+        <!--<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
+        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="js/jquery.tablesorter.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                //$("#jtable").tablesorter(); 
+
+                $("#refresh_btn").click(function(){
+                    $.ajax({
+                        type: "GET",
+                        url: "/refresh_jobs",
+                        success: function(data) {
+                        },
+                        error: function(xhr, type) {
+                        }
+                    });
+                });
+
+                $("#btn_search1").click(function(){
+                    $.ajax({
+                        type: "GET",
+                        url: "/jobs/byjob?job="+$("#search_input1").val(), //这是个返回json的url，返回的json在下面的data里
+                        success: function(data) { 
+                            //alert(data);
+                            l = data.length;
+                            
+                            $("#jtbody").empty();
+                            for (var i = 0; i < l; i++){
+                                var tr = $("<tr></tr>");
+                                tr.appendTo($("#jtbody"));
+                                
+                                $("<td>"+i+"</td>").appendTo(tr);
+                                if (data[i].job_url == '#'){
+                                    $("<td>"+data[i].job+"</td>").appendTo(tr);
+                                }else{
+                                    $("<td><a href="+data[i].job_url+' target="_blank">' + data[i].job+"</td>").appendTo(tr);
+                                }
+                                $("<td>"+data[i].company+"</td>").appendTo(tr);
+                                $("<td>"+data[i].place+"</td>").appendTo(tr);
+                                $("<td>"+data[i].salary+"</td>").appendTo(tr);
+                                $("<td>"+data[i].apply_date+"</td>").appendTo(tr);
+                                $("<td>"+data[i].resume_name+"</td>").appendTo(tr);
+                                $("<td>"+data[i].recent_apply+"</td>").appendTo(tr);
+                                
+                            }
+                            //$("#jtable").tablesorter(); 
+                            
+                        },
+                        error: function(xhr, type) {
+                        }
+                    });
+                });
+
+
+                $("#btn_search2").click(function(){
+                    $.ajax({
+                        type: "GET",
+                        url: "/jobs/bycompany?company="+$("#search_input2").val(), //这是个返回json的url，返回的json在下面的data里
+                        success: function(data) { 
+                            //alert(data);
+                            l = data.length;
+                            
+                            $("#jtbody").empty();
+                            for (var i = 0; i < l; i++){
+                                var tr = $("<tr></tr>");
+                                tr.appendTo($("#jtbody"));
+                                
+                                $("<td>"+i+"</td>").appendTo(tr);
+                                if (data[i].job_url == '#'){
+                                    $("<td>"+data[i].job+"</td>").appendTo(tr);
+                                }else{
+                                    $("<td><a href="+data[i].job_url+' target="_blank">' + data[i].job+"</td>").appendTo(tr);
+                                }
+                               
+                                $("<td>"+data[i].company+"</td>").appendTo(tr);
+                                $("<td>"+data[i].place+"</td>").appendTo(tr);
+                                $("<td>"+data[i].salary+"</td>").appendTo(tr);
+                                $("<td>"+data[i].apply_date+"</td>").appendTo(tr);
+                                $("<td>"+data[i].resume_name+"</td>").appendTo(tr);
+                                $("<td>"+data[i].recent_apply+"</td>").appendTo(tr);
+                                
+                            }
+                            //$("#jtable").tablesorter(); 
+                            
+                        },
+                        error: function(xhr, type) {
+                        }
+                    });
+                });
+
+                $("#btn_3").click(function(){
+                    alert($("#search_input").val());
+                    $("#jtbody").empty();
+                    for (var i = 0; i < 10; i++){
+                        var tr = $("<tr></tr>");
+                        tr.appendTo($("#jtbody"));
+                        for (var j = 0; j < 10; j++){
+                            $("<td>sdf</td>").appendTo(tr);
+                        }
+                    }
+                     
+                });
+
+                
+            });   
+        </script>
+    </head>
+
+    <body>
+        <div class="container">
+            <div id='btn_content' class="col-lg-12">
+               <div class="col-lg-12">
+                 <div class="btn-group">
+                    <button id='refresh_btn' type="button" class="btn btn-default">更新</button>
+                    <button id='btn_2' type="button" class="btn btn-default">按钮 2</button>
+                    <button id='btn_3' type="button" class="btn btn-default">按钮 3</button>
+                  </div>
+               </div>
+            </div>
+
+
+            <div id='search_content'>
+              <ul id="myTab" class="nav nav-tabs">
+                <li class="active">
+                    <a href="#searchbyjob" data-toggle="tab">
+                         搜职位
+                    </a>
+                </li>
+                <li><a href="#searchbycompany" data-toggle="tab">搜公司</a></li>
+              </ul>
+             <div>&nbsp;</div>
+              <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="searchbyjob">
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input id='search_input1' type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button id='btn_search1' class="btn btn-default" type="button">
+                                            Search job!
+                                        </button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </div><!-- /.col-lg-6 -->
+                </div>
+                <div class="tab-pane fade" id="searchbycompany">
+                            <div class="col-lg-6">
+                                <div class="input-group">
+                                    <input id='search_input2' type="text" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button id='btn_search2' class="btn btn-default" type="button">
+                                            Search company!
+                                        </button>
+                                    </span>
+                                </div>
+                            </div> 
+                </div>
+            
+              </div>
+            </div>
+
+
+
+            
+            <div>&nbsp;</div>
+            <table id='jtable' class="table table-hover table-condensed">
+              <thead>
+                <tr>
+                    <th width="5%">序号</th>
+                    <th width="20%">职位名</th>
+                    <th width="25%">公司名</th>
+                    <th width="10%">工作地点</th>
+                    <th width="10%">薪资</th>
+                    <th width="10%">申请日期</th>
+                    <th width="10%">简历名称</th>
+                    <th width="10%">近两周申请数</th>
+                </tr>
+              </thead>
+              <tbody id='jtbody'>
+                {% if jobs %}
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    {% if job['job_url'] == '#' %}
+                        <td>{{ job['job'] }}</td>
+                    {% else %}
+                        <td><a href="{{ job['job_url'] }}" target="_blank">{{ job['job'] }}</a></td>
+                    {% endif %}
+                    <td>{{ job['company'] }}</td>
+                    <td>{{ job['place'] }}</td>
+                    <td>{{ job['salary'] }}</td>
+                    <td>{{ job['apply_date'] }}</td>
+                    <td>{{ job['resume_name'] }}</td>
+                    <td>{{ job['recent_apply'] }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <h1>can not get data</h1>
+                {% endif %}
+              </tbody>
+            </table>
+        </div>
+
+    </body>
+
+
+
+</html>

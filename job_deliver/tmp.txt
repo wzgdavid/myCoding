@@ -1,0 +1,11 @@
+beautifulsoup4==4.4.0
+html5lib==0.999999999
+lxml==3.7.3
+virtualenv==15.0.3
+selenium==3.4.2
+pymongo==3.4.0
+requests==2.14.2
+flask==0.12.2
+jinja2==2.9.6
+pymysql==0.7.11
+sqlalchemy==1.1.10
