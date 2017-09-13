@@ -4,3 +4,7 @@ https://www.bilibili.com/video/av10790020/?from=search&seid=4960634614192767568#
 
 
 lecture 1 网上某笔记 https://zhuanlan.zhihu.com/p/28488510
+
+
+location
+E:\workspace\myCoding\learn_deeplearning\learn_tensorflow\CS20SI
