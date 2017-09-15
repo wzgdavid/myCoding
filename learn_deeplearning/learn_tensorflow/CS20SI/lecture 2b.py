@@ -93,16 +93,16 @@ x, y are placeholders for the actual values.
 '''
 tf.placeholder(dtype, shape=None, name=None)
 '''
-#a = tf.placeholder( tf.float32, shape=(3,) ) # 这里shape写 3  (3) 都可以，我还是保持元组定义一致
-##print(a.shape)
-#b = tf.constant([5,5,5], tf.float32)
-## a 和 b 有相同的shape
-#c = a+b   # short for tf.add(a, b)
-#
-#with tf.Session() as sess:
-#    #print( sess.run(c) ) # Error 因为a还没有值
-#    # 正确用法是用字典给a 一个值
-#    print( sess.run(c, {a:[1,2,3]}) )  # 这里是用a这个变量作为key，不是'a'字符串
+a = tf.placeholder( tf.float32, shape=(3,) ) # 这里shape写 3  (3) 都可以，我还是保持元组定义一致
+#print(a.shape)
+b = tf.constant([5,5,5], tf.float32)
+# a 和 b 有相同的shape
+c = a+b   # short for tf.add(a, b)
+
+with tf.Session() as sess:
+    #print( sess.run(c) ) # Error 因为a还没有值
+    # 正确用法是用字典给a 一个值
+    print( sess.run(c, {a:[1,2,3]}) )  # 这里是用a这个变量作为key，不是'a'字符串
 
 
 #tf.Graph.is_feedable(tersor)
@@ -110,27 +110,27 @@ tf.placeholder(dtype, shape=None, name=None)
 '''
 Feeding values to TF op
 '''
-#a = tf.add(2, 4)
-#b = tf.multiply(a, 3)
-#with tf.Session() as sess:
-#    replace_dict = {a: 15}
-#    print( sess.run(b ) )   # 18
-#    print( sess.run(b, feed_dict=replace_dict) ) # 45
+a = tf.add(2, 4)
+b = tf.multiply(a, 3)
+with tf.Session() as sess:
+    replace_dict = {a: 15}
+    print( sess.run(b ) )   # 18
+    print( sess.run(b, feed_dict=replace_dict) ) # 45
 
 '''
 Lazy loading Example
 '''
 # no Lazy loading:
-#x = tf.Variable(10, name='x')
-#y = tf.Variable(20, name='y')
-#z = tf.add(x, y)
-#with tf.Session() as sess:
-#    sess.run(tf.global_variables_initializer())
-#    #x.assign(10)
-#    #y.assign(4)
-#    writer = tf.summary.FileWriter('./graphs',sess.graph)
-#    for _ in range(10):
-#        sess.run(z)
+x = tf.Variable(10, name='x')
+y = tf.Variable(20, name='y')
+z = tf.add(x, y)
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    #x.assign(10)
+    #y.assign(4)
+    writer = tf.summary.FileWriter('./graphs',sess.graph)
+    for _ in range(10):
+        sess.run(z)
 #writer.close()
 
 #  Lazy loading:

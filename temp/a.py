@@ -1,41 +1,15 @@
-# encoding:utf-8
+import numpy as np
+import tensorflow as tf
+import os  
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # 让它别出警告
 
-import urllib, urllib2
-from pprint import pprint
-from collections import Counter
-from bs4 import BeautifulSoup
+a = tf.placeholder( tf.float32, shape=(3,) ) # 这里shape写 3  (3) 都可以，我还是保持元组定义一致
+#print(a.shape)
+b = tf.constant([5,5,5], tf.float32)
+# a 和 b 有相同的shape
+c = a+b   # short for tf.add(a, b)
 
-import math
-import sys
-'''
-sample urls
-http://tieba.baidu.com/f?kw=python&ie=utf-8&pn=0     #page 1
-http://tieba.baidu.com/f?kw=python&ie=utf-8&pn=50    #     2
-http://tieba.baidu.com/f?kw=python&ie=utf-8&pn=100   #     3
-http://tieba.baidu.com/f?kw=python&ie=utf-8&pn=150   #     4
-
-http://tieba.baidu.com/f?kw=gupiao&ie=utf-8&pn=50  #
-'''
-
-
-
-#def add():
-#    print int(sys.argv[1])+ int(sys.argv[2])
-#add()
-
-def input_name():
-    firstname = raw_input("input your first name")
-    lastname = raw_input("input your last name")
-    print firstname, lastname
-#input_name()
-
-def fs(a, c, n):
-    bsum = 0
-    for i in range(n):
-        bn = math.floor((a+bsum*(2-c))/c)
-        bsum += bn
-        yield bn
-
-fs_sequence = fs(300000, 7.2, 9)
-for n in fs_sequence:
-    print n
+with tf.Session() as sess:
+    #print( sess.run(c) ) # Error 因为a还没有值
+    # 正确用法是用字典给a 一个值
+    print( sess.run(c, {a:[1,2,3]}) )  # 这里是用a这个变量作为key，不是'a'字符串
