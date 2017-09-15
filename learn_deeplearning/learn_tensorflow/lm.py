@@ -8,17 +8,17 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # 让它别出警告
 x = tf.placeholder(tf.float32, shape=(None, 1) )
 W = tf.Variable( tf.zeros([1, 1]) )
 b = tf.Variable( tf.zeros([1]) )
-y = tf.matmul(x, W) + b
+y = tf.matmul(x, W) + b  # 好比预测值
 
 # 成本函数
-y_ = tf.placeholder(tf.float32, shape=(None, 1) )
-cost = tf.reduce_sum( tf.pow((y_-y), 2) )
+y_ = tf.placeholder(tf.float32, shape=(None, 1) )  # y真实值
+cost = tf.reduce_sum( tf.pow((y_-y), 2) )          # 
 
 
 # 梯度下降
 #有了线性模型、成本函数和数据，我们就可以开始执行梯度下降从而最小化代价函数，以获得 W、b 的「good」值。
 #0.00001 是我们每次进行训练时在最陡的梯度方向上所采取的「步」长；它也被称作学习率（learning rate）。
-train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(cost)
+train_step = tf.train.GradientDescentOptimizer(0.00001).minimize(cost)
 
 
 # 训练模型
