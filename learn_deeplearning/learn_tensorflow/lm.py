@@ -1,3 +1,6 @@
+'''
+一元线性回归
+'''
 import tensorflow as tf
 import numpy as np
 import os
@@ -7,12 +10,13 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # 让它别出警告
 # 线性模型
 x = tf.placeholder(tf.float32, shape=(None, 1) )
 W = tf.Variable( tf.zeros([1, 1]) )
-b = tf.Variable( tf.zeros([1]) )
-y = tf.matmul(x, W) + b  # 好比预测值
+b = tf.Variable( tf.zeros([1]) )    # W 和b是变量，是我最后要求得的值
+y = tf.matmul(x, W) + b  # 一元线性模型，y好比预测值， 
 
+
+y_ = tf.placeholder(tf.float32, shape=(None, 1) )  # y的真实值
 # 成本函数
-y_ = tf.placeholder(tf.float32, shape=(None, 1) )  # y真实值
-cost = tf.reduce_sum( tf.pow((y_-y), 2) )          # 
+cost = tf.reduce_mean( tf.pow((y_-y), 2) )          # 
 
 
 # 梯度下降

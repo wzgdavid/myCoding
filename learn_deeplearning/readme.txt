@@ -1,2 +1,1 @@
-python 3.6.2
-
+anaconda3-4.4.0
