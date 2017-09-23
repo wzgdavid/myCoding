@@ -19,9 +19,8 @@ cost = tf.reduce_mean( tf.pow((y_-y), 2) )
 
 train_step = tf.train.GradientDescentOptimizer(0.0001).minimize(cost)
 
-
-# 训练模型
 init = tf.global_variables_initializer()
+# 训练模型
 with tf.Session() as sess:
     sess.run(init)
     
