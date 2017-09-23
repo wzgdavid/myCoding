@@ -1,19 +1,25 @@
 '''
-模仿mnist hello world
 十进制数字转成二进制
+加一个隐藏层
+9月23  现在或许还实现不了，再学习学习继续这个
 '''
 import tensorflow as tf
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL']='2' 
+os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
+#隐藏层1， nn个神经元
+nn = 5
+x = tf.placeholder(tf.float32, shape=(None, 10) )  # 输入层
+W = tf.Variable( tf.zeros([10, nn]) )
+b = tf.Variable( tf.zeros([nn]) )
 
-x = tf.placeholder(tf.float32, shape=(None, 10) )
-W = tf.Variable( tf.zeros([10, 4]) )
-b = tf.Variable( tf.zeros([4]) )
+x1 = tf.nn.softmax(tf.matmul(x,W) + b)
+W1 = tf.Variable( tf.zeros([nn, 4]) )
+b1 = tf.Variable( tf.zeros([4]) )
 
 #y = tf.matmul(x, W) + b
-y = tf.nn.softmax(tf.matmul(x,W) + b)  # 对0的预测不太好
+y = tf.nn.softmax(tf.matmul(x1,W1) + b1)   # 输出层
 y_ = tf.placeholder(tf.float32, shape=[None, 4])
 
 #cost = tf.reduce_mean( tf.pow((y_-y), 2) )  
@@ -35,7 +41,6 @@ xs=np.array([
     [0,0,0,0,0,0,0,0,1,0],
     [0,0,0,0,0,0,0,0,0,1],  # 9
     ])
-
 ys = np.array([
     [0,0,0,0],  # 0
     [0,0,0,1],  # 1
@@ -63,21 +68,10 @@ with tf.Session() as sess:
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print(sess.run(accuracy, feed_dict=feed_dict))
 
-#[array([[ 0.        ,  0.        ,  0.        ,  0.        ],
-#       [-1.35087454, -2.70348215, -2.68072891,  6.73475647],
-#       [-1.40772378, -2.76683831,  7.73852444, -3.56427217],
-#       [-3.17997289, -5.13133526,  4.70337105,  3.60793853],
-#       [-1.37526608,  7.74654293, -2.8053236 , -3.56620646],
-#       [-3.22232914,  4.7174654 , -5.12197399,  3.62679076],
-#       [-3.26112342,  4.67811251,  4.68281555, -6.09981918],
-#       [-5.23044682,  2.10876775,  2.10989833,  1.01179576],
-#       [ 9.89613056, -3.04181051, -3.02874827, -3.82572794],
-#       [ 7.02894497, -5.2636528 , -5.26226282,  3.49695659]], dtype=float32), array([-2.10260057,  0.34405318,  0.33590332,  1.42266285], dtype=float32)]
-#1.0
 
 # 预测一个值
 with tf.Session() as sess:
     y = tf.nn.softmax(tf.matmul(x, W_) + b_)
-    feed_dict = {x: [xs[3, :]]}
+    feed_dict = {x: [xs[1, :]]}
     y_pred = sess.run(y, feed_dict=feed_dict)
     print('y_pred: ', y_pred)

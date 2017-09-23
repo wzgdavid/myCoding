@@ -7,7 +7,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
-x = tf.placeholder(tf.float32, [None, 784])
+x = tf.placeholder(tf.float32, [None, 784], name='x') # 因为是None，既每次训练的数量不固定，batch取多少都可以
 
 W = tf.Variable(tf.zeros([784,10]))
 b = tf.Variable(tf.zeros([10]))
