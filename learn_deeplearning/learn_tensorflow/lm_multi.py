@@ -9,7 +9,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # 让它别出警告
 feature_num = 2 # 特征数量
 x = tf.placeholder( tf.float32, shape=[None, feature_num] )
 W = tf.Variable( tf.zeros([feature_num, 1]) )
-b = tf.Variable(tf.zeros([1]))
+b = tf.Variable( tf.zeros([1]) )
 y = tf.matmul(x, W) + b
 
 y_ = tf.placeholder(tf.float32, shape=[None, 1])

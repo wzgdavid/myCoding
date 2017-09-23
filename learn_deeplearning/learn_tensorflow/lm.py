@@ -8,9 +8,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2' # 让它别出警告
 
 #https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&mid=2650718466&idx=1&sn=016f111001e8354d49dd4ce279d283cd#rd
 # 线性模型
-x = tf.placeholder(tf.float32, shape=(None, 1) )
-W = tf.Variable( tf.zeros([1, 1]) )
-b = tf.Variable( tf.zeros([1]) )    # W 和b是变量，是我最后要求得的值
+x = tf.placeholder(tf.float32, shape=(None, 1) ) # None就是在那个维度上不做限定
+W = tf.Variable( tf.zeros([1,1]) )
+b = tf.Variable( tf.zeros(1) )    # W 和b是变量，是我最后要求得的值
 y = tf.matmul(x, W) + b  # 一元线性模型，y好比预测值， 
 
 
