@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)http://www.cnblogs.com/qggg/p/6832342.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/bundle-LessIsMore.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/bundle-LessIsMore-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/qggg/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/qggg/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/qggg/wlwmanifest.xml">
+<script type="text/javascript" src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/encoder.js.下载"></script><script src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/jquery.js.下载" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'qggg', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/blog-common.js.下载" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+		
+<!--done-->
+<div class="title"><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/qggg/">.每天进步一点点</a></div>
+<div class="subtitle"></div>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+<li id="nav_myhome"><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/qggg/">首页</a></li>
+<li id="nav_newpost"><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+<li id="nav_contact"><a id="blog_nav_contact" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/.%E6%AF%8F%E5%A4%A9%E8%BF%9B%E6%AD%A5%E4%B8%80%E7%82%B9%E7%82%B9">联系</a></li>
+<li id="nav_rss"><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/qggg/rss">订阅</a>
+<!--<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/qggg/rss"><img src="//www.cnblogs.com/images/xml.gif" alt="订阅" /></a>--></li>
+<li id="nav_admin"><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+</ul>
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+随笔-28&nbsp;
+文章-0&nbsp;
+评论-0&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="http://www.cnblogs.com/qggg/p/6832342.html">TF-卷积函数 tf.nn.conv2d 介绍</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><p>转自&nbsp;http://www.cnblogs.com/welhzh/p/6607581.html</p>
+<p>下面是这位博主自己的翻译加上测试心得</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>tf.nn.conv2d是TensorFlow里面实现卷积的函数，参考文档对它的介绍并不是很详细，实际上这是搭建卷积神经网络比较核心的一个方法，非常重要</p>
+<h3 id="tfnnconv2dinput-filter-strides-padding-usecudnnongpunone-namenone-"><code>tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, name=None)</code></h3>
+<p>除去name参数用以指定该操作的name，与方法有关的一共五个参数<code>：</code></p>
+<p><code>第一个参数input：指需要做卷积的输入图像，它要求是一个Tensor，具有[batch, in_height, in_width, in_channels]这样的shape，具体含义是<code>[训练时一个batch的图片数量, 图片高度, 图片宽度, 图像通道数]，注意<code>这是一个4维的Tensor，要求类型为float32和float64其中之一</code></code></code></p>
+<p><code><code>第二个参数filter：相当于CNN中的卷积核，<code>它要求是一个Tensor，具有</code>[filter_height, filter_width, in_channels, out_channels]<code>这样的shape</code>，具体含义是<code><code><code></code>[卷积核的高度，<code><code><code><code>卷积核的宽度，图像通道数，卷积核个数</code></code></code></code>]，要求类型与参数input相同，有一个地方需要注意，第三维<code><code>in_channels</code></code>，就是参数input的第四维<code></code></code></code></code><br></code></p>
+<p><code><code>第三个参数strides：卷积时在图像每一维的步长，这是一个一维的向量，长度4</code><br></code></p>
+<p><code>第四个参数padding：string类型的量，只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式（后面会介绍）</code></p>
+<p><code>第五个参数：use_cudnn_on_gpu:bool类型，是否使用cudnn加速，默认为true</code></p>
+<p><code>结果返回一个Tensor，这个输出，就是我们常说的feature map，shape仍然是<code>[batch, height, width, channels]</code>这种形式。</code></p>
+<p><code>那么TensorFlow的卷积具体是怎样实现的呢，用一些例子去解释它：</code></p>
+<p><code>1.考虑一种最简单的情况，现在有一张3×3单通道的图像（对应的shape：[1，3，3，1]），用一个1×1的卷积核（<code><code>对应的shape：[1，1，1，1]</code></code>）去做卷积，最后会得到一张3×3的feature map</code></p>
+<p><code><code>2.增加图片的通道数，使用<code><code>一张3×3五通道的图像<code><code>（对应的shape：[1，3，3，5]），<code><code>用一个1×1的卷积核（<code><code>对应的shape：[1，1，1，1]</code></code>）去做卷积，仍然是一张3×3<code><code>的feature map，这就相当于每一个像素点，卷积核都与该像素点的每一个通道做卷积。</code></code></code></code></code></code></code></code></code></code></p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,3,3,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([1,1,5,1<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">VALID</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>3.把卷积核扩大，现在用3×3的卷积核做卷积，最后的输出是一个值，相当于情况2的feature map所有像素点的值求和</p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,3,3,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([3,3,5,1<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">VALID</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>4.使用更大的图片将情况2的图片扩大到5×5，仍然是3×3的卷积核，令步长为1，输出3×3的feature map</p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,5,5,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([3,3,5,1<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">VALID</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>注意我们可以把这种情况看成情况2和情况3的中间状态，卷积核以步长1滑动遍历全图，以下x表示的位置，表示卷积核停留的位置，每停留一个，输出feature map的一个像素</p>
+<p>&nbsp;.....</p>
+<pre>.xxx.
+.xxx.
+.xxx.
+.....</pre>
+<p>5.上面我们一直令参数padding的值为‘VALID’，当其为‘SAME’时，表示卷积核可以停留在图像边缘，如下，输出5×5的feature map</p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,5,5,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([3,3,5,1<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">SAME</span><span style="color: #800000">'</span>)</pre>
+</div>
+<pre>xxxxx
+xxxxx
+xxxxx
+xxxxx
+xxxxx</pre>
+<p>6.如果卷积核有多个</p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,5,5,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([3,3,5,7<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">SAME</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>此时输出7张5×5的feature map</p>
+<p><code>7.步长不为1的情况，文档里说了对于图片，因为只有两维，通常strides取[1，stride，stride，1]</code></p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([1,5,5,5<span style="color: #000000">]))
+
+filter </span>= tf.Variable(tf.random_normal([3,3,5,7<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 2, 2, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">SAME</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>此时，输出7张3×3的feature map</p>
+<p>&nbsp;&nbsp; x.x.x</p>
+<pre>.....
+x.x.x
+.....
+x.x.x</pre>
+<p>8.如果batch值不为1，同时输入10张图</p>
+<div class="cnblogs_code">
+<pre>input = tf.Variable(tf.random_normal([10,5,5,5<span style="color: #000000">]))
+filter </span>= tf.Variable(tf.random_normal([3,3,5,7<span style="color: #000000">]))
+
+op </span>= tf.nn.conv2d(input, filter, strides=[1, 2, 2, 1], padding=<span style="color: #800000">'</span><span style="color: #800000">SAME</span><span style="color: #800000">'</span>)</pre>
+</div>
+<p>每张图，都有7张3×3的feature map，输出的shape就是[10，3，3，7]</p>
+<p>最后，把程序总结一下：</p>
+<div class="cnblogs_code"><div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div>
+<pre>import tensorflow as tf<br><br># tf.nn.conv2d(input, filter, strides, padding, use_cudnn_on_gpu=None, name=None)<br># 除去name参数用以指定该操作的name，与方法有关的一共五个参数：<br>#<br># 第一个参数input：指需要做卷积的输入图像，它要求是一个Tensor，具有[batch, in_height, in_width, in_channels]这样的shape，具体含义是[训练时一个batch的图片数量, 图片高度, 图片宽度, 图像通道数]，注意这是一个4维的Tensor，要求类型为float32和float64其中之一<br>#<br># 第二个参数filter：相当于CNN中的卷积核，它要求是一个Tensor，具有[filter_height, filter_width, in_channels, out_channels]这样的shape，具体含义是[卷积核的高度，卷积核的宽度，图像通道数，卷积核个数]，要求类型与参数input相同，有一个地方需要注意，第三维in_channels，就是参数input的第四维<br>#<br># 第三个参数strides：卷积时在图像每一维的步长，这是一个一维的向量，长度4<br>#<br># 第四个参数padding：string类型的量，只能是"SAME","VALID"其中之一，这个值决定了不同的卷积方式（后面会介绍）<br>#<br># 第五个参数：use_cudnn_on_gpu:bool类型，是否使用cudnn加速，默认为true<br>#<br># 结果返回一个Tensor，这个输出，就是我们常说的feature map<br><br>oplist=[]<br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 3, 3, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([1 ,1 , 5 ,1]))<br><br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,1,1,1], use_cudnn_on_gpu=False, padding='VALID')<br>oplist.append([op2, "case 2"])<br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 3, 3, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,1]))<br><br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,1,1,1], use_cudnn_on_gpu=False, padding='VALID')<br>oplist.append([op2, "case 3"])<br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 5, 5, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,1]))<br><br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,1,1,1], use_cudnn_on_gpu=False, padding='VALID')<br>oplist.append([op2, "case 4"])<br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 5, 5, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,1]))<br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,1,1,1], use_cudnn_on_gpu=False, padding='SAME')<br>oplist.append([op2, "case 5"])<br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 5, 5, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,7]))<br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,1,1,1], use_cudnn_on_gpu=False, padding='SAME')<br>oplist.append([op2, "case 6"])<br><br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([1, 5, 5, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,7]))<br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,2,2,1], use_cudnn_on_gpu=False, padding='SAME')<br>oplist.append([op2, "case 7"])<br><br><br># [batch, in_height, in_width, in_channels]<br>input_arg  = tf.Variable(tf.ones([4, 5, 5, 5]))<br># [filter_height, filter_width, in_channels, out_channels]<br>filter_arg = tf.Variable(tf.ones([3 ,3 , 5 ,7]))<br>op2 = tf.nn.conv2d(input_arg, filter_arg, strides=[1,2,2,1], use_cudnn_on_gpu=False, padding='SAME')<br>oplist.append([op2, "case 8"])<br><br>with tf.Session() as a_sess:<br>    a_sess.run(tf.global_variables_initializer())<br>    for aop in oplist:<br>        print("----------{}---------".format(aop[1]))<br>        print(a_sess.run(aop[0]))<br>        print('---------------------\n\n')</pre>
+<div class="cnblogs_code_toolbar"><span class="cnblogs_code_copy"><a href="javascript:void(0);" onclick="copyCnblogsCode(this)" title="复制代码"><img src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/copycode.gif" alt="复制代码"></a></span></div></div>
+<p>&nbsp;</p>
+<p>结果是这样的：</p>
+<p>&nbsp;</p>
+<p>----------case 2---------<br>[[[[ 5.]<br>   [ 5.]<br>   [ 5.]]</p>
+<p>  [[ 5.]<br>   [ 5.]<br>   [ 5.]]</p>
+<p>  [[ 5.]<br>   [ 5.]<br>   [ 5.]]]]<br>---------------------</p>
+<p><br>----------case 3---------<br>[[[[ 45.]]]]<br>---------------------</p>
+<p><br>----------case 4---------<br>[[[[ 45.]<br>   [ 45.]<br>   [ 45.]]</p>
+<p>  [[ 45.]<br>   [ 45.]<br>   [ 45.]]</p>
+<p>  [[ 45.]<br>   [ 45.]<br>   [ 45.]]]]<br>---------------------</p>
+<p><br>----------case 5---------<br>[[[[ 20.]<br>   [ 30.]<br>   [ 30.]<br>   [ 30.]<br>   [ 20.]]</p>
+<p>  [[ 30.]<br>   [ 45.]<br>   [ 45.]<br>   [ 45.]<br>   [ 30.]]</p>
+<p>  [[ 30.]<br>   [ 45.]<br>   [ 45.]<br>   [ 45.]<br>   [ 30.]]</p>
+<p>  [[ 30.]<br>   [ 45.]<br>   [ 45.]<br>   [ 45.]<br>   [ 30.]]</p>
+<p>  [[ 20.]<br>   [ 30.]<br>   [ 30.]<br>   [ 30.]<br>   [ 20.]]]]<br>---------------------</p>
+<p><br>----------case 6---------<br>[[[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]]<br>---------------------</p>
+<p><br>----------case 7---------<br>[[[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]]<br>---------------------</p>
+<p><br>----------case 8---------<br>[[[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]</p>
+<p><br> [[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]</p>
+<p><br> [[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]</p>
+<p><br> [[[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]</p>
+<p>  [[ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 45.  45.  45.  45.  45.  45.  45.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]]</p>
+<p>  [[ 20.  20.  20.  20.  20.  20.  20.]<br>   [ 30.  30.  30.  30.  30.  30.  30.]<br>   [ 20.  20.  20.  20.  20.  20.  20.]]]]<br>---------------------</p>
+<p>&nbsp;</p></div><div id="MySignature" style="display: block;">不对之处欢迎指正</div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory"></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(6832342,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;08e0dd81-231f-e711-9fc1-ac853d9f53cc&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/qggg/" target="_blank"><img src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/qggg/">.每天进步一点点</a><br>
+            <a href="http://home.cnblogs.com/u/qggg/followees">关注 - 3</a><br>
+            <a href="http://home.cnblogs.com/u/qggg/followers">粉丝 - 1</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;08e0dd81-231f-e711-9fc1-ac853d9f53cc&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(6832342,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(6832342,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/qggg/p/6832278.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/qggg/p/6832278.html" title="发布于2017-05-09 19:34">TF-TF数据生成方法</a><br><a href="http://www.cnblogs.com/qggg/p/6832705.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/qggg/p/6832705.html" title="发布于2017-05-09 21:12">TF-池化函数 tf.nn.max_pool 的介绍</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2017-05-09 19:50</span> <a href="http://www.cnblogs.com/qggg/">.每天进步一点点</a> 阅读(<span id="post_view_count">3212</span>) 评论(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=6832342" rel="nofollow">编辑</a> <a href="http://www.cnblogs.com/qggg/p/6832342.html#" onclick="AddToWz(6832342);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=347945,cb_entryId=6832342,cb_blogApp=currentBlogApp,cb_blogUserGuid='08e0dd81-231f-e711-9fc1-ac853d9f53cc',cb_entryCreatedDate='2017/5/9 19:50:00';loadViewCount(cb_entryId);</script>
+	
+</div><!--end: topics 文章、评论容器-->
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/qggg/p/6832342.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/qggg/p/6832342.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="https://cloud.tencent.com/developer/labs?fromSource=gwzcw.436876.436876.436876" target="_blank">【推荐】腾讯云上实验室 1小时搭建人工智能应用</a><br><a href="http://www.gcpowertools.com.cn/products/spreadjs/?utm_source=cnblogs&amp;utm_medium=blogpage&amp;utm_term=bottom&amp;utm_content=SpreadJS&amp;utm_campaign=community" target="_blank">【推荐】可嵌入您系统的“在线Excel”！SpreadJS 纯前端表格控件</a><br><a href="http://click.aliyun.com/m/18488/" target="_blank">【推荐】阿里云“全民云计算”优惠升级</a><br></div>
+<div id="opt_under_post"></div>
+<div id="cnblogs_c1" class="c_ad_block"><a href="https://www.mtyun.com/promote/69f73a72-f46d-4103-88e5-94ed2f81259d/" target="_blank"><img width="300" height="250" src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/24442-20170921101521025-1845913848.jpg" alt="美团云0921"></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/578997/" target="_blank">斯坦福开学演讲：保存好奇心，服务世界，忠于自己</a><br> ·  <a href="http://news.cnblogs.com/n/578996/" target="_blank">开发Taste Graph功能，Pinterest让你一看就剁手</a><br> ·  <a href="http://news.cnblogs.com/n/578995/" target="_blank">宜家广告疯狂“调戏”苹果，乔布斯和他的 iPhone 4 都躺枪了</a><br> ·  <a href="http://news.cnblogs.com/n/578994/" target="_blank">法拉第未来：内华达工厂没有终结 土地仍是我们的</a><br> ·  <a href="http://news.cnblogs.com/n/578993/" target="_blank">共享充电宝Hi电花样裁员：降薪发配边疆、不报到就辞退</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="cnblogs_c2" class="c_ad_block"><a href="https://www.jiguang.cn/devservice?source=bky&amp;hmsr=%E5%8D%9A%E5%AE%A2%E5%9B%AD&amp;hmpl=&amp;hmcu=&amp;hmkw=&amp;hmci=" target="_blank"><img width="468" height="60" src="./TF-卷积函数 tf.nn.conv2d 介绍 - .每天进步一点点 - 博客园_files/24442-20170908132742304-1045119416.gif" alt="极光0908"></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/576251/" target="_blank">如何阅读计算机科学类的书</a><br> ·  <a href="http://kb.cnblogs.com/page/578103/" target="_blank">Google 及其云智慧</a><br> ·  <a href="http://kb.cnblogs.com/page/575829/" target="_blank">做到这一点，你也可以成为优秀的程序员</a><br> ·  <a href="http://kb.cnblogs.com/page/566880/" target="_blank">写给立志做码农的大学生</a><br> ·  <a href="http://kb.cnblogs.com/page/569057/" target="_blank">架构腐化之谜</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/qggg/">.每天进步一点点</a><br>园龄：<a href="http://home.cnblogs.com/u/qggg/" title="入园时间：2017-04-12">5个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/qggg/followers/">1</a><br>关注：<a href="http://home.cnblogs.com/u/qggg/followees/">3</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;08e0dd81-231f-e711-9fc1-ac853d9f53cc&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"><div id="blog-calendar" style=""><table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+	<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+		<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/08/01&#39;);return false;">&lt;</a></td><td align="center">2017年9月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2017/10/01&#39;);return false;">&gt;</a></td></tr>
+	</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">27</td><td class="CalOtherMonthDay" align="center">28</td><td class="CalOtherMonthDay" align="center">29</td><td class="CalOtherMonthDay" align="center">30</td><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td class="CalWeekendDay" align="center">2</td></tr><tr><td class="CalWeekendDay" align="center">3</td><td align="center">4</td><td align="center">5</td><td align="center">6</td><td align="center">7</td><td align="center">8</td><td class="CalWeekendDay" align="center">9</td></tr><tr><td class="CalWeekendDay" align="center">10</td><td align="center">11</td><td align="center">12</td><td align="center">13</td><td align="center">14</td><td align="center">15</td><td class="CalWeekendDay" align="center">16</td></tr><tr><td class="CalWeekendDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td align="center">20</td><td align="center">21</td><td align="center">22</td><td class="CalWeekendDay" align="center">23</td></tr><tr><td class="CalWeekendDay" align="center">24</td><td class="CalTodayDay" align="center">25</td><td align="center">26</td><td align="center">27</td><td align="center">28</td><td align="center">29</td><td class="CalWeekendDay" align="center">30</td></tr><tr><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td></tr>
+</tbody></table></div><script type="text/javascript">loadBlogDefaultCalendar();</script></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div id="sidebar_search" class="mySearch">
+<h3 class="catListTitle">搜索</h3>
+<div id="sidebar_search_box">
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk"></div>
+</div>
+</div>
+
+</div><div id="sidebar_shortcut" class="sidebar-block">
+<div class="catListLink">
+<h3 class="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/qggg/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/qggg/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/qggg/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/qggg/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/qggg/tag/" title="我的博客的标签列表">我的标签</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div class="catListPostArchive">
+<h3 class="catListTitle">随笔档案</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/qggg/archive/2017/05.html">2017年5月 (21)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/qggg/archive/2017/04.html">2017年4月 (7)</a> </li>
+
+</ul>
+
+</div>
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap" style="display: none;">
+<div class="catListComment">
+<h3 class="catListTitle">最新评论</h3>
+	<div id="RecentCommentsBlock"></div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">阅读排行榜</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/qggg/p/6832342.html">1. TF-卷积函数 tf.nn.conv2d 介绍(3210)</a></li><li><a href="http://www.cnblogs.com/qggg/p/6849881.html">2. TF-tf.nn.dropout介绍(1675)</a></li><li><a href="http://www.cnblogs.com/qggg/p/6836238.html">3. TF-调整矩阵维度 tf.reshape 介绍(1102)</a></li><li><a href="http://www.cnblogs.com/qggg/p/6832705.html">4. TF-池化函数 tf.nn.max_pool 的介绍(974)</a></li><li><a href="http://www.cnblogs.com/qggg/p/6858325.html">5. TF-variable生成方法区别(793)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap" style="display: none;">
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"></div>
+</div>
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap" style="display: none;">
+<div class="catListView">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div id="TopDiggPostsBlock"></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2017 .每天进步一点点
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>

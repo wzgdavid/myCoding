@@ -26,7 +26,7 @@ learning_rate = 0.1
 batch_size = 128
 n_epochs = 500
 
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+mnist = input_data.read_data_sets("../MNIST_data/", one_hot=True)
 
 X = tf.placeholder(tf.float32, [batch_size, 784], name='X_placeholder')
 Y = tf.placeholder(tf.float32, [batch_size, 10], name='Y_placeholder')
