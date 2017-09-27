@@ -1,8 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import os
-import gzip
-import pickle
+
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2' 
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
@@ -30,7 +29,15 @@ with tf.Session() as sess:
         feed_dict = {x: batch_xs, y_: batch_ys}
         _, cost = sess.run([train_step, cross_entropy], feed_dict=feed_dict)
         #print('epoch {}: {}'.format(i, cost))
-    writer = tf.summary.FileWriter('./graphs', sess.graph) # cmd中键入tensorboard --logdir="./graphs" --port=6006  
+    #writer = tf.summary.FileWriter('./graphs', sess.graph) # cmd中键入tensorboard --logdir="./graphs" --port=6006 
+
+    # 验证正确率 
     correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float")) # 在这里 softmax比 sigmoid 和 relu都高
     print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
+    
+    # 预测几个值
+    # 预测就是run一下y  
+    x1, y1 = mnist.train.next_batch(10)
+    one_pred = sess.run(y, feed_dict={x:x1})
+    print(y1, one_pred)
