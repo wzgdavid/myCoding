@@ -64,10 +64,21 @@ with tf.Session() as sess:
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print(sess.run(accuracy, feed_dict=feed_dict))
 
+    # 所以这样预测，直接run 那个 y
+    # 因为这个W b 在同一个session中，所以写在这里
+    for i in range(3):
+        feed_dict = {x: [xs[i, :]]}
+        y_pred = sess.run(y, feed_dict=feed_dict)
+        print('y_pred: ', y_pred, i)
 
-# 预测一个值
-with tf.Session() as sess:
-    y = tf.nn.softmax(tf.matmul(x, W_) + b_)
-    feed_dict = {x: [xs[0, :]]}
-    y_pred = sess.run(y, feed_dict=feed_dict)
-    print('y_pred: ', y_pred)
+
+# 预测一个值  
+# 一开始想到的是得出训练完的W b 值 W_ b_
+# 但这样没必要，其实训练好之后默认的W b 已经在y那个式子中，用不着特意得到
+# 而且这个W是个很大的矩阵，打印出来也看不懂什么，除了这种很简单的例子
+#with tf.Session() as sess:
+#    y = tf.nn.softmax(tf.matmul(x, W_) + b_)
+#    feed_dict = {x: [xs[0, :]]}
+#    y_pred = sess.run(y, feed_dict=feed_dict)
+#    print('y_pred: ', y_pred)
+

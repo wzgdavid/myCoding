@@ -1,7 +1,7 @@
 '''
 在2的基础上加一个隐藏层
 9月25日
-还是不会改，不会预测
+是不是太简单了，加个隐含层训练反而不好？
 '''
 import tensorflow as tf
 import numpy as np
@@ -9,7 +9,7 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 
-n = 5 # 隐藏层5个神经元
+n = 10 # 隐藏层5个神经元
 x = tf.placeholder(tf.float32, shape=(None, 4) )  # 输入层
 W = tf.Variable( tf.zeros([4, n]) )
 b = tf.Variable( tf.zeros([n]) )
@@ -20,8 +20,8 @@ W1 = tf.Variable( tf.zeros([n, 10]) )
 b1 = tf.Variable( tf.zeros([10]) )
  
 
-y = tf.nn.softmax(tf.matmul(x1,W1) + b1)   # 输出层
-y_ = tf.placeholder(tf.float32, shape=[None, 10])
+y = tf.nn.sigmoid(tf.matmul(x1,W1) + b1)   # 输出层
+y_ = tf.placeholder(tf.float32, shape=[None, 10])  # 真实标签
 
 #cost = tf.reduce_mean( tf.pow((y_-y), 2) )  
 cost = -tf.reduce_sum(y_*tf.log(y)) 
@@ -58,7 +58,7 @@ ys=np.array([
 with tf.Session() as sess:
     sess.run(init)
 
-    for i in range(200):
+    for i in range(2000):
         idx = np.random.randint(10)  # 随机获取一个index
         feed_dict = {x: [xs[idx, :]],
                      y_: [ys[idx, :]]}
@@ -69,6 +69,11 @@ with tf.Session() as sess:
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print(sess.run(accuracy, feed_dict=feed_dict))
 
+    # 预测
+    for i in range(3):
+        feed_dict = {x: [xs[i, :]]}
+        y_pred = sess.run(y, feed_dict=feed_dict)
+        print('y_pred: ', y_pred, i)
 
 # 预测一个值
 #with tf.Session() as sess:
