@@ -1,6 +1,12 @@
 #encoding utf-8
-import xlrd
+from copy import deepcopy
+import xlrd, xlwt
 import os
+import numpy as np
+import xlsxwriter
+from xlutils.copy import copy 
+
+
 rootdir='D:\\Users\\Administrator\\Desktop\\test'  # 放文件的目录
 files = os.listdir(rootdir)
 #shop_names = ['金创大厦','康桥万信酒店','川沙现代广场店','森兰商都','富海商务','高帆大厦','恒生万鹂','开文大厦','日月光','莲花科创园']
@@ -32,7 +38,7 @@ shop_names={
     '川沙现代广场': 27
 }
 
-dct = {}
+dct = {}  # 把所有数据读入这个字典，然后把这个字典中的数据写到区组统计文件中
 for filename in files:
     if filename == dest_file:  # 
         dest_file_path = os.path.join(rootdir, filename)
@@ -51,18 +57,37 @@ for filename in files:
 
                 
             tb = workbook.sheet_by_name(sheet_name)
-            dct[short_name] = [tb.cell(1,4).value, tb.cell(1,5).value, tb.cell(1,7).value,
-                tb.cell(1,9).value, tb.cell(1,10).value, tb.cell(1,11).value,
-                tb.cell(1,12).value, tb.cell(1,13).value, tb.cell(1,14).value]
+            for i in range(1, 30):# 有些不一定写在第三行，所以要一行行检查，哪行有数据，记录哪行的数据
+                data = [tb.cell(i,4).value, tb.cell(i,5).value, tb.cell(i,7).value,
+                    tb.cell(i,9).value, tb.cell(i,10).value, tb.cell(i,11).value,
+                    tb.cell(i,12).value, tb.cell(i,13).value, tb.cell(i,14).value]
+                arr = np.array(data)
+                #print(data, arr, arr.sum())
+                lst = list(arr)
+                #print(lst,type(lst[0]))
+                if type(arr[0]) is np.float64: # 说明是数字，
+                    #print(i,data)
+                    dct[short_name] = deepcopy(data)
+                    break
 
             #print(sheet.cell(3,2))  # cell(行，列)   从0 开始
             #print(sheet.col_values(2))
 
-    #print(dct)  # 虽然字典数据没错，但遍历重复了， 以后改
 
-workbook = xlrd.open_workbook(dest_file_path)
-tb = workbook.sheet_by_name(sheet_name)
+#print(dct)  # 虽然字典数据没错，但遍历重复了， 以后改
 
-tb.write(0,1,'test text')#第0行第一列写入内容
 
-wbk.save('test.xls')
+
+'''
+-----------------------------
+以上为读取数据， 这里开始写数据
+------------------------------
+'''
+readbook = xlrd.open_workbook(dest_file_path)
+
+writebook = copy(readbook) 
+table = readbook.sheet_by_name(sheet_name)#通过名称获取
+
+for k, v in dct.items():
+    print(k, v)
+    
