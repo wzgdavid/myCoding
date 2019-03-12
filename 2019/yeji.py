@@ -3,16 +3,18 @@ from copy import deepcopy
 import xlrd, xlwt
 import os
 import numpy as np
+import pandas as pd
 import xlsxwriter
 from xlutils.copy import copy 
-
+from openpyxl import load_workbook
 
 rootdir='D:\\Users\\Administrator\\Desktop\\test'  # 放文件的目录
 files = os.listdir(rootdir)
-#shop_names = ['金创大厦','康桥万信酒店','川沙现代广场店','森兰商都','富海商务','高帆大厦','恒生万鹂','开文大厦','日月光','莲花科创园']
+#shop_row_map = ['金创大厦','康桥万信酒店','川沙现代广场店','森兰商都','富海商务','高帆大厦','恒生万鹂','开文大厦','日月光','莲花科创园']
 dest_file = '张磊区组业绩2019.03.10.xlsx'  # 需要统计的目标文件
 sheet_name= '10'  # 表格名， 业绩中 表示日期的日
-shop_names={
+
+shop_row_map={
     '金创大厦': 2,     #  点名 ：行号
     '日月光': 3,
     '开文大厦': 4,
@@ -30,6 +32,7 @@ shop_names={
     '张江集电港': 18,
     '传奇广场': 19,
     '光大安石': 20,
+    '海德堡': 21,
     '康桥万信': 22,
     '畅星大厦': 23,
     '中兴和泰': 24,
@@ -38,6 +41,7 @@ shop_names={
     '川沙现代广场': 27
 }
 
+
 dct = {}  # 把所有数据读入这个字典，然后把这个字典中的数据写到区组统计文件中
 for filename in files:
     if filename == dest_file:  # 
@@ -45,17 +49,16 @@ for filename in files:
         continue
     # 遍历每个店的业绩文件，把数据放在一个大的字典里  格式   {店1：[一串数据], 店2：[一串数据],.......}
     # 然后遍历这个字典，把数据填到区组业绩中
-    for short_name in shop_names.keys():
+    
+    for short_name in shop_row_map.keys():
         #print(filename)
         if short_name in filename:
             
             filepath = os.path.join(rootdir, filename)
 
-    
             #print(filepath)
             workbook = xlrd.open_workbook(filepath)
 
-                
             tb = workbook.sheet_by_name(sheet_name)
             for i in range(1, 30):# 有些不一定写在第三行，所以要一行行检查，哪行有数据，记录哪行的数据
                 data = [tb.cell(i,4).value, tb.cell(i,5).value, tb.cell(i,7).value,
@@ -72,22 +75,15 @@ for filename in files:
 
             #print(sheet.cell(3,2))  # cell(行，列)   从0 开始
             #print(sheet.col_values(2))
-
+    
 
 #print(dct)  # 虽然字典数据没错，但遍历重复了， 以后改
 
 
 
-'''
------------------------------
-以上为读取数据， 这里开始写数据
-------------------------------
-'''
-readbook = xlrd.open_workbook(dest_file_path)
 
-writebook = copy(readbook) 
-table = readbook.sheet_by_name(sheet_name)#通过名称获取
-
-for k, v in dct.items():
-    print(k, v)
-    
+'''还有一种办法，就是把各个店的数据读取到一个dataframe中，然后保存到一个CSV文件中，然后手动复制到区组统计中，
+这样程序好写多了，操作也不麻烦，只要跑一次程序然后拷贝一下
+'''
+df = pd.DataFrame(dct).T
+print(df)
