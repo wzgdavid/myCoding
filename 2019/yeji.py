@@ -12,11 +12,18 @@ from openpyxl import load_workbook
 '''把各个店的数据读取到一个dataframe中，然后保存到一个CSV文件中，然后手动复制到区组统计中，
 这样程序好写多了，操作也不麻烦，只要跑一次程序然后拷贝一下'''
 
+
+
 rootdir='D:\\Users\\Administrator\\Desktop\\test'  # 放文件的目录
-files = os.listdir(rootdir)
-#shop_row_map = ['金创大厦','康桥万信酒店','川沙现代广场店','森兰商都','富海商务','高帆大厦','恒生万鹂','开文大厦','日月光','莲花科创园']
 dest_file = '张磊区组业绩2019.03.10.xlsx'  # 需要统计的目标文件
 sheet_name= '10'  # 表格名， 业绩中 表示日期的日
+
+
+
+
+files = os.listdir(rootdir)
+#shop_row_map = ['金创大厦','康桥万信酒店','川沙现代广场店','森兰商都','富海商务','高帆大厦','恒生万鹂','开文大厦','日月光','莲花科创园']
+
 
 shop_row_map={
     '金创大厦': 0,     
